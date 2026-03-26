@@ -278,7 +278,7 @@ Task: Analyze each provided video ad and produce a structured scene-by-scene bre
 Header Data:
 * Estimated Duration: [X] seconds
 * Hook Archetype: [e.g., Skeptic/Honesty, Specific Claim, Identity Hook, etc.]
-* Primary Structure: [A (Narrative), B (Listicle), C (Rapid Proof), D (Testimonial), or E (Hybrid/Other)]
+* Primary Structure: [A (Narrative), B (Listicle), C (Rapid Proof), or D (Testimonial)]
 * Primary Motivator: [Problem, Outcome, Deal, or Anti-Alternative]
 
 Scene Table:
@@ -337,6 +337,12 @@ The more detail in the Gemini breakdown, the sharper Claude's analysis will be.
 <b>Option 2 — VO transcript.</b> Paste the spoken script. Claude can analyze the copy engine and persuasion arc from words alone.<br><br>
 <b>Option 3 — Text description.</b> Describe what happens in the ad: who's in it, what they say, what's shown, how long it runs. Less precise but workable for quick analysis.<br><br>
 <b>The more detail you provide, the sharper the decomposition.</b>
+</div>
+
+<div class="wf-section-label">What Claude tags automatically</div>
+<div class="wf-note">
+Every concept, script, or hook batch Claude outputs includes <b>mandatory tags</b>: job type (MORE/UPGRADE/ADAPT/NEW), lane, structure (A/B/C/D), hook archetype, motivator (M-PROBLEM/M-OUTCOME/M-DEAL/M-ANTI-ALT), Entity ID impact (new or same + why), and estimated duration.<br><br>
+<b>If tags are missing,</b> something drifted — ask Claude to re-tag. The tags are how you verify Claude is thinking about Andromeda diversity, not just copy quality.
 </div>
 
 <div class="wf-section-label">What Claude won't do until you ask</div>
