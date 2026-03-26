@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factor Creative Project — IC Workflow Guide</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f4f0;
+  --color-background-tertiary: #eeedea;
+  --color-background-info: #E6F1FB;
+  --color-background-warning: #FAEEDA;
+  --color-background-success: #EAF3DE;
+  --color-text-primary: #2c2c2a;
+  --color-text-secondary: #73726c;
+  --color-text-tertiary: #9c9a92;
+  --color-text-info: #0C447C;
+  --color-text-warning: #633806;
+  --color-text-success: #27500A;
+  --color-border-tertiary: rgba(0,0,0,0.15);
+  --color-border-secondary: rgba(0,0,0,0.3);
+  --color-border-info: #85B7EB;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background-primary: #1a1a18;
+    --color-background-secondary: #2c2c2a;
+    --color-background-tertiary: #3d3d3a;
+    --color-background-info: #042C53;
+    --color-background-warning: #412402;
+    --color-background-success: #173404;
+    --color-text-primary: #e8e6de;
+    --color-text-secondary: #9c9a92;
+    --color-text-tertiary: #73726c;
+    --color-text-info: #85B7EB;
+    --color-text-warning: #FAC775;
+    --color-text-success: #C0DD97;
+    --color-border-tertiary: rgba(255,255,255,0.15);
+    --color-border-secondary: rgba(255,255,255,0.3);
+    --color-border-info: #378ADD;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  font-size: 16px;
+  padding: 2rem 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+h1 { font-size: 22px; font-weight: 500; margin-bottom: 0.25rem; }
+.subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 2rem; }
+.wf-tabs{display:flex;gap:6px;margin:0 0 1.25rem;flex-wrap:wrap}
+.wf-tab{padding:7px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:13px;font-weight:400;cursor:pointer;transition:all .15s;font-family:inherit}
+.wf-tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);font-weight:500}
+.wf-panel{display:none}
+.wf-panel.active{display:block}
+.wf-steps{display:flex;flex-direction:column;gap:0}
+.wf-step{display:flex;gap:12px;padding:8px 0}
+.wf-dot-col{display:flex;flex-direction:column;align-items:center;width:24px;flex-shrink:0}
+.wf-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.wf-line{width:1px;flex:1;min-height:10px}
+.wf-step-content{flex:1;padding-bottom:2px}
+.wf-step-label{font-size:13px;font-weight:500;margin:0 0 2px}
+.wf-step-desc{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+.wf-sim{margin:1.25rem 0 0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.wf-sim-header{padding:8px 16px;background:var(--color-background-secondary);font-size:12px;color:var(--color-text-secondary);font-weight:500}
+.wf-msg{padding:10px 16px;border-top:0.5px solid var(--color-border-tertiary)}
+.wf-msg-role{font-size:11px;font-weight:500;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px}
+.wf-msg-role.ic{color:var(--color-text-info)}
+.wf-msg-role.cl{color:var(--color-text-success)}
+.wf-msg-text{font-size:13px;color:var(--color-text-primary);margin:0;line-height:1.65}
+.wf-tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-secondary);margin:0 2px}
+.wf-note{margin:1rem 0 0;padding:10px 14px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.wf-note b{color:var(--color-text-primary);font-weight:500}
+.wf-section-label{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin:1.25rem 0 0.5rem;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.wf-collapsed{display:none}
+.wf-toggle{font-size:12px;color:var(--color-text-info);cursor:pointer;background:none;border:none;padding:4px 0;font-family:inherit}
+</style>
+</head>
+<body>
+
+<h1>Factor creative project — IC workflow guide</h1>
+<p class="subtitle">How to use the Claude project for writing, scaling, and ideating Factor creative</p>
+
+<div class="wf-tabs">
+<button class="wf-tab active" onclick="showTab('write')">Write</button>
+<button class="wf-tab" onclick="showTab('scale')">Scale</button>
+<button class="wf-tab" onclick="showTab('ideate')">Ideate</button>
+<button class="wf-tab" onclick="showTab('tips')">IC tips</button>
+</div>
+
+<div id="panel-write" class="wf-panel active">
+<div class="wf-section-label">Workflow steps</div>
+<div class="wf-steps">
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#378ADD"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">1. State job type + lane</p><p class="wf-step-desc">"NEW concept, GLP-1 lane" or "MORE variants of Asset #20, same lane"</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#378ADD"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">2. Get 5-8 hooks</p><p class="wf-step-desc">Each tagged with archetype. Fresh vs. proven flagged. No strategy essays.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#378ADD"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">3. Pick direction</p><p class="wf-step-desc">Choose 1-2 hooks. Say what's missing if none land.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#378ADD"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">4. Copy arc develops</p><p class="wf-step-desc">Full arc: onramp, benefit sequence, barrier-bust, CTA. No visuals yet.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#378ADD"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">5. Refine</p><p class="wf-step-desc">"Too safe" / "Push harder" / "More like #22" / "Not DR enough"</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#888780"></div></div><div class="wf-step-content"><p class="wf-step-label">6. Format for production</p><p class="wf-step-desc">Say "format this" or "ready to brief" — only then do timestamps + visuals appear.</p></div></div>
+</div>
+
+<div class="wf-section-label">Simulated session</div>
+<div class="wf-sim">
+<div class="wf-sim-header">Write workflow — new GLP-1 concept</div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">I need a NEW concept for the GLP-1 lane. Something that goes beyond "Factor made it stick."</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text">6 hooks pushing fresh GLP-1 territory. 1-3 are proven-pattern adjacent, 4-6 push into white space.<br><br>
+1. "GLP-1 without the right meals is a waste of a prescription" <span class="wf-tag">Mistake/Warning</span> — Medically complementary framing<br>
+2. "My appetite disappeared — and so did my muscle" <span class="wf-tag">Personal Story</span> — Muscle loss fear, proven GLP-1 anxiety<br>
+3. "The nausea was winning until THIS showed up at my door" <span class="wf-tag">Situational Relatability</span> — Names what viewers actually feel<br>
+4. "Nobody told me GLP-1 would make cooking impossible" <span class="wf-tag">Skeptic/Honesty</span> — #20/#22 mechanism adapted to GLP-1<br>
+5. "I'm on Ozempic and I eat better than anyone I know" <span class="wf-tag">Bold Claim</span> — Flips restriction to abundance. Fresh.<br>
+6. "This is what 30g of protein looks like when you can barely eat" <span class="wf-tag">Specific Claim</span> — Proven number+effort formula meets GLP-1 reality</p></div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">Love 4 and 6. Develop both.</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text"><b>Hook 4: "Nobody told me GLP-1 would make cooking impossible"</b><br>
+<span class="wf-tag">NEW</span> <span class="wf-tag">GLP-1</span> <span class="wf-tag">B — Listicle</span> <span class="wf-tag">Skeptic/Honesty</span> <span class="wf-tag">M-PROBLEM</span> <span class="wf-tag">New Entity ID</span> <span class="wf-tag">~28s</span><br><br>
+<b>Onramp:</b> "When the medication killed my appetite, I thought that was the whole point. But then I stopped cooking entirely — and started losing muscle, not just fat."<br><br>
+<b>Reveal #1:</b> "Nobody told me Factor has a GLP-1 Balance menu designed for exactly this. Portioned for a smaller appetite, packed with protein so you don't waste what the medication is doing."<br><br>
+<b>Reveal #2:</b> "Nobody told me I'd get 30+ grams of protein in meals I can actually finish — no force-feeding, no leftover guilt."<br><br>
+<b>Reveal #3:</b> "And nobody told me it takes 2 minutes. When cooking feels impossible, that's the difference."<br><br>
+<b>CTA:</b> "50% off your first box plus free breakfast for a year."<br><br>
+<button class="wf-toggle" onclick="this.nextElementSibling.classList.toggle('wf-collapsed');this.textContent=this.textContent==='Show hook 6 arc'?'Hide hook 6 arc':'Show hook 6 arc'">Show hook 6 arc</button><div class="wf-collapsed" style="margin-top:8px"><b>Hook 6: "This is what 30g of protein looks like when you can barely eat"</b><br>
+<span class="wf-tag">NEW</span> <span class="wf-tag">GLP-1</span> <span class="wf-tag">C — Rapid Proof</span> <span class="wf-tag">Specific Claim</span> <span class="wf-tag">M-PROBLEM</span> <span class="wf-tag">New Entity ID</span> <span class="wf-tag">~21s</span><br><br>
+<b>Onramp:</b> "Since starting GLP-1, eating enough protein has been the hardest part. I can't eat big portions anymore — so every bite has to count."<br><br>
+<b>Rapid proof:</b> "Factor's meals pack 30-40g protein into portions that actually match my appetite. Chef-crafted. Dietitian-approved. Ready in 2 minutes — because when you're nauseous, standing at a stove isn't happening."<br><br>
+<b>CTA:</b> "50% off your first box plus free breakfast for a year."</div></p></div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">Hook 4 is strong. Push the onramp harder — make the muscle loss scarier.</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text"><b>Revised onramp:</b> "I was celebrating the scale going down — until my trainer told me I wasn't losing fat. I was losing muscle. Turns out when you can barely eat, your body burns muscle first. That's what nobody warns you about on GLP-1."<br><br>Sharper because it introduces a specific authority (trainer), names the exact fear (burning muscle, not fat), and uses the viewer's own optimism against them ("celebrating the scale going down").</p></div>
+</div>
+</div>
+
+<div id="panel-scale" class="wf-panel">
+<div class="wf-section-label">Workflow steps</div>
+<div class="wf-steps">
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#1D9E75"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">1. Name source asset + target</p><p class="wf-step-desc">"ADAPT #20 into Mediterranean" or "MORE variants of #22, same lane." For ads outside the library, paste a scene breakdown or VO transcript (see IC tips).</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#1D9E75"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">2. Get decomposition</p><p class="wf-step-desc">Hook mechanism, structural engine, copy engine, audience contract. What to preserve vs. change.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#1D9E75"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">3. Get 3-5 variants</p><p class="wf-step-desc">Each as hook + copy arc, tagged with Entity ID impact.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#1D9E75"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">4. Pick and refine</p><p class="wf-step-desc">Choose variants to develop. Give directional feedback.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#888780"></div></div><div class="wf-step-content"><p class="wf-step-label">5. Format for production</p><p class="wf-step-desc">Say "format this" or "ready to brief."</p></div></div>
+</div>
+
+<div class="wf-section-label">Simulated session</div>
+<div class="wf-sim">
+<div class="wf-sim-header">Scale workflow — adapt #20 to Mediterranean</div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">ADAPT Asset #20 (The Skeptic's Reveal) into the Mediterranean lane.</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text"><b>Decomposition of #20 (The Skeptic's Reveal):</b><br><br>
+<b>Hook mechanism:</b> Skeptic/anti-ad framing creates a trust gap — viewer expects brand BS, gets transparency instead. The "what they don't tell you" opener signals insider knowledge.<br><br>
+<b>Structural engine:</b> Listicle (B) — 3 numbered reveals in descending surprise order. Each "no one told me" beat compounds conspiratorial feeling. Structure is the persuasion, not just the organization.<br><br>
+<b>Copy engine:</b> "No one told me" repetition + specific number per reveal (50g protein, free breakfast, Keto/Calorie Smart plans). Each reveal = a specific claim the viewer didn't know.<br><br>
+<b>Audience contract:</b> Promises the real story on Factor to someone skeptical of meal delivery marketing.<br><br>
+<b>Preserve:</b> "No one told me" repetition, listicle structure, skeptic hook, numbered reveals with specific claims<br>
+<b>Change:</b> Reveals swap from protein/convenience to Med-specific surprises. Audience shifts from "skeptic of meal delivery" to "skeptic of diet trends who hasn't tried Mediterranean"<br><br>
+
+Here are 3 adapted variants:<br><br>
+
+<b>Variant 1:</b> "Why is no one being honest about Mediterranean meals?"<br>
+Reveal 1: "No one told me you could eat Mediterranean every day for under $X/meal" (cost anchor)<br>
+Reveal 2: "No one told me I'd have more energy by week 2" (outcome proof)<br>
+Reveal 3: "No one told me it doesn't taste like a diet" (taste surprise, mirrors #35 language)<br>
+<span class="wf-tag">New Entity ID — new talent</span><br><br>
+
+<b>Variant 2:</b> "The Mediterranean diet is the world's healthiest and no one's making it easy — until now"<br>
+Reveal 1: "No one told me Factor does the Mediterranean meal planning for you" (convenience)<br>
+Reveal 2: "No one told me every meal is dietitian-approved AND chef-crafted" (authority stack)<br>
+Reveal 3: "No one told me my skin would clear up" (#35 proof point, surprising benefit)<br>
+<span class="wf-tag">New Entity ID — new talent + new lane</span><br><br>
+
+<b>Variant 3:</b> "I've tried every wellness trend. Here's why Mediterranean is the only one that stuck"<br>
+Reveal 1: "No one told me it's ranked the #1 diet in the world — not by influencers, by researchers" (#28 authority)<br>
+Reveal 2: "No one told me Factor rotates 100+ meals so I'd never get bored" (variety as anti-diet)<br>
+Reveal 3: "No one told me I'd still be eating like this 6 months later" (longevity proof)<br>
+<span class="wf-tag">New Entity ID — new talent + identity hook blend</span></p></div>
+</div>
+</div>
+
+<div id="panel-ideate" class="wf-panel">
+<div class="wf-section-label">Workflow steps</div>
+<div class="wf-steps">
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#D85A30"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">1. Ask for new territory</p><p class="wf-step-desc">"What should we test next in Fiber Filled?" or broadly "Where's the biggest white space?"</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#D85A30"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">2. Get 3 strategic options</p><p class="wf-step-desc">Territories to explore — not hooks yet. Each with rationale and Entity ID implication.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#D85A30"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">3. Pick a territory</p><p class="wf-step-desc">Choose direction. Claude then generates hooks within that territory.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#D85A30"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">4. Get 5-8 hooks</p><p class="wf-step-desc">Generated via problem-first, cultural moment, or competitive gap methods. Freshness-gated.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#D85A30"></div><div class="wf-line" style="background:var(--color-border-tertiary)"></div></div><div class="wf-step-content"><p class="wf-step-label">5. Develop and refine</p><p class="wf-step-desc">Pick winners, develop into copy arcs, refine together.</p></div></div>
+<div class="wf-step"><div class="wf-dot-col"><div class="wf-dot" style="background:#888780"></div></div><div class="wf-step-content"><p class="wf-step-label">6. Format for production</p><p class="wf-step-desc">Say "format this" or "ready to brief."</p></div></div>
+</div>
+
+<div class="wf-section-label">Simulated session</div>
+<div class="wf-sim">
+<div class="wf-sim-header">Ideate workflow — fiber filled exploration</div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">What should we test next in Fiber Filled? We only have Asset #38.</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text">Fiber Filled has massive white space. Three directions:<br><br>
+<b>1. Gut health symptoms as hook territory.</b> Bloating, energy crashes, digestion issues — these are acute problems with cultural momentum (microbiome, fiber discourse). Guaranteed new Entity IDs since #38 is the only asset.<br><br>
+<b>2. Fiber + GLP-1 crossover.</b> GLP-1 medications cause digestive issues. Fiber-forward meals as the companion solution. Taps expanding GLP-1 audience with a differentiated angle nobody else is running.<br><br>
+<b>3. Fiber as the overlooked performance multiplier.</b> #38 touches this ("protein builds muscle, but fiber's the multiplier"). Push further into the fitness audience who obsesses over protein but ignores fiber. Counter-intuitive for a protein-saturated audience.<br><br>
+Which territory?</p></div>
+<div class="wf-msg"><p class="wf-msg-role ic">IC</p><p class="wf-msg-text">Let's go with 1 — gut health symptoms.</p></div>
+<div class="wf-msg"><p class="wf-msg-role cl">Claude</p><p class="wf-msg-text">6 hooks in gut health symptom territory:<br><br>
+1. "The bloating wasn't from what I was eating — it was from what I WASN'T eating" <span class="wf-tag">Discovery</span> — Counter-intuitive, stops the scroll<br>
+2. "I fixed my 3pm energy crash by adding ONE thing to my meals" <span class="wf-tag">Specific Claim</span> — Ambiguous "one thing" + relatable symptom<br>
+3. "Your protein obsession is wrecking your gut and nobody's talking about it" <span class="wf-tag">Mistake/Warning</span> — Directly challenges protein-lane audience<br>
+4. "I spent $300 on gut health supplements before someone told me THIS" <span class="wf-tag">Skeptic/Honesty</span> — Cost anchor + insider knowledge framing<br>
+5. "Why your gut feels worse the 'healthier' you eat" <span class="wf-tag">Bold Claim</span> — Counter-intuitive, targets clean-eating crowd<br>
+6. "My nutritionist said stop adding supplements and start eating THIS instead" <span class="wf-tag">Authority</span> — Borrows professional credibility<br><br>
+Hooks 1, 3, and 5 are freshest — they challenge existing behavior rather than offering a generic solution. Hook 4 adapts the proven #20/#22 skeptic mechanism.</p></div>
+</div>
+</div>
+
+<div id="panel-tips" class="wf-panel">
+<div class="wf-section-label">What to bring to the session</div>
+<div class="wf-note">
+<b>Be specific about what you want.</b> "NEW concept, GLP-1 lane, Structure B" gets better output than "write me some ads." State the job type, lane, and any constraints upfront.<br><br>
+<b>Name the asset when scaling.</b> "ADAPT #20 into Mediterranean" tells Claude exactly what mechanism to decompose. Vague requests like "something like our skeptic ads" force guesswork.<br><br>
+<b>Bring your hypothesis.</b> "I think there's an angle around GLP-1 muscle loss that we haven't tested" gives Claude a starting point that's grounded in your account knowledge.
+</div>
+
+<div class="wf-section-label">Steering phrases that redirect Claude</div>
+<div class="wf-note">
+<b>"Too safe" / "Push harder"</b> — Claude shifts to lower-saturation hook archetypes and cultural moment territory.<br><br>
+<b>"Too generic"</b> — Claude adds specificity: numbers, named situations, viewer behaviors. Mines the CSV for authentic phrasing.<br><br>
+<b>"More like Asset #X"</b> — Claude decomposes X's mechanism and applies it to the current concept.<br><br>
+<b>"Not converting" / "Not DR enough"</b> — Claude tightens the benefit sequence, checks relief-before-features order, adds barrier-busting.<br><br>
+<b>"Feels like an ad"</b> — Claude shifts to first-person voice, removes brand language from the first 10 seconds, uses confessional hooks.
+</div>
+
+<div class="wf-section-label">Working with ads outside the library</div>
+<div class="wf-note">
+<b>Claude can't watch video files.</b> If you want to scale, adapt, or analyze an ad that isn't in the 42-asset library, you need to provide one of these:<br><br>
+<b>Option 1 — Scene-by-scene breakdown (best).</b> Use your Gemini video breakdown workflow to generate a structured table (scene #, visual description, on-screen text, VO script). Paste the output directly into the chat. This gives Claude the same level of detail it has for library assets.<br><br>
+<b>Option 2 — VO transcript.</b> Paste the spoken script. Claude can analyze the copy engine, hook mechanism, and persuasion arc from the words alone — but will ask clarifying questions about visuals if needed for Entity ID or format analysis.<br><br>
+<b>Option 3 — Text description.</b> Describe what happens in the ad: who's in it, what they say, what's shown, how long it runs. Less precise but workable for quick analysis.<br><br>
+<b>The more detail you provide, the sharper the decomposition.</b> A full scene-by-scene breakdown gets you the same quality analysis as any library asset. A one-sentence description gets you a surface-level read.
+</div>
+
+<div class="wf-section-label">What Claude won't do until you ask</div>
+<div class="wf-note">
+<b>Visual direction</b> — no shot lists or visual suggestions until you say "ready for visuals" or "format for production."<br><br>
+<b>Full script formatting</b> — no timestamps until you say "format this" or "ready to brief."<br><br>
+<b>Strategy essays</b> — Claude opens with hooks or options, not lane analysis. If you want strategic context, ask for it explicitly.
+</div>
+</div>
+
+</div>
+
+<script>
+function showTab(id){
+document.querySelectorAll('.wf-tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.wf-panel').forEach(p=>p.classList.remove('active'));
+document.querySelector('[onclick="showTab(\''+id+'\')"]').classList.add('active');
+document.getElementById('panel-'+id).classList.add('active');
+}
+</script>
+</body>
+</html>
