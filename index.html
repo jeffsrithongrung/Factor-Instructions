@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factor — Strategic Creative Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0c0e12;
+    --bg-card: #14171e;
+    --bg-card-hover: #1a1e28;
+    --bg-section: #111419;
+    --border: #232830;
+    --border-light: #2d3340;
+    --text: #e2e5eb;
+    --text-dim: #c8cdd6;
+    --text-bright: #ffffff;
+    --accent: #5eead4;
+    --accent-dim: #2d6b63;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --win: #34d399;
+    --hit: #60a5fa;
+    --fail: #9ca3af;
+    --p1: #f87171;
+    --p2: #fbbf24;
+    --p3: #9ca3af;
+    --purple: #a78bfa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; font-size: 14.5px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* HERO */
+.hero { background: linear-gradient(135deg, #0c0e12 0%, #141929 50%, #0c0e12 100%); border-bottom: 1px solid var(--border); padding: 48px 0 40px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 50%, rgba(94,234,212,0.04) 0%, transparent 60%); }
+.hero-content { position: relative; z-index: 1; }
+.hero h1 { font-family: 'Fraunces', serif; font-size: 2.4rem; color: var(--text-bright); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.hero .subtitle { color: var(--accent); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
+.hero .meta { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-dim); font-size: 0.82rem; }
+.hero .meta span { display: flex; align-items: center; gap: 5px; }
+
+/* NAV */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(12,14,18,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-inner { display: flex; overflow-x: auto; gap: 0; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn { background: none; border: none; color: var(--text-dim); padding: 12px 18px; font-size: 0.8rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.2s; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; }
+.nav-btn:hover { color: var(--text-bright); background: rgba(255,255,255,0.03); }
+.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* SECTIONS */
+.output-section { padding: 40px 0 20px; }
+.output-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.output-title { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--text-bright); font-weight: 700; margin-bottom: 24px; }
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* COLLAPSIBLE */
+.collapse-section { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; background: var(--bg-card); overflow: hidden; }
+.collapse-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; user-select: none; transition: background 0.15s; }
+.collapse-header:hover { background: var(--bg-card-hover); }
+.collapse-header h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-bright); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.collapse-header .badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 100px; font-weight: 600; letter-spacing: 0.03em; }
+.badge-high { background: rgba(52,211,153,0.15); color: var(--win); }
+.badge-moderate { background: rgba(96,165,250,0.15); color: var(--hit); }
+.badge-p1 { background: rgba(248,113,113,0.15); color: var(--p1); }
+.badge-p2 { background: rgba(251,191,36,0.15); color: var(--p2); }
+.badge-critical { background: rgba(248,113,113,0.2); color: var(--danger); }
+.badge-new { background: rgba(167,139,250,0.15); color: var(--purple); }
+.collapse-arrow { font-size: 1.2rem; color: var(--text-dim); transition: transform 0.25s; flex-shrink: 0; }
+.collapse-section.open .collapse-arrow { transform: rotate(180deg); }
+.collapse-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.collapse-section.open .collapse-body { max-height: 80000px; }
+.collapse-content { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+
+/* PROSE */
+.prose { line-height: 1.72; }
+.prose p { margin-bottom: 14px; color: var(--text); }
+.prose strong { color: var(--text-bright); font-weight: 600; }
+.prose h4 { font-size: 0.92rem; font-weight: 700; color: var(--accent); margin: 20px 0 8px; }
+.prose em { color: var(--text-dim); }
+.prose ul { margin: 8px 0 14px 20px; }
+.prose li { margin-bottom: 4px; color: var(--text); }
+
+/* TABLES */
+.table-wrap { overflow-x: auto; margin: 14px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+th { text-align: left; padding: 8px 12px; background: rgba(94,234,212,0.06); color: var(--accent); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* AD CARDS */
+.ad-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0; }
+.ad-card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; position: relative; transition: border-color 0.2s, transform 0.15s; }
+.ad-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+.ad-rank { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.75); color: var(--accent); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; z-index: 2; backdrop-filter: blur(4px); }
+.ad-media { aspect-ratio: 4/5; max-height: 260px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.ad-media video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.ad-info { padding: 10px 12px; }
+.ad-name { font-size: 0.72rem; color: var(--text-dim); font-weight: 500; margin-bottom: 6px; line-height: 1.4; word-break: break-all; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ad-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.ad-tag { font-size: 0.6rem; padding: 1px 6px; border-radius: 3px; font-weight: 600; letter-spacing: 0.03em; }
+.tag-hook { background: rgba(94,234,212,0.12); color: var(--accent); }
+.tag-motivator { background: rgba(167,139,250,0.12); color: var(--purple); }
+.tag-structure { background: rgba(96,165,250,0.12); color: var(--hit); }
+.ad-metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+.metric { font-size: 0.7rem; color: var(--text-dim); }
+.metric b { color: var(--text-bright); }
+
+/* ONE PARAGRAPH */
+.one-para { font-size: 0.92rem; line-height: 1.8; color: var(--text); padding: 20px 24px; background: linear-gradient(135deg, rgba(94,234,212,0.03), rgba(167,139,250,0.03)); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; }
+.one-para strong { color: var(--text-bright); }
+.one-para em { color: var(--text-dim); }
+
+/* CALLOUTS */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 14px 0; font-size: 0.85rem; color: var(--text); }
+.callout-warn { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.2); }
+.callout-danger { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2); }
+.callout-info { background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.15); }
+.callout strong { color: var(--text-bright); }
+
+/* CONCEPT SKETCHES */
+.sketch { background: rgba(94,234,212,0.04); border-left: 3px solid var(--accent-dim); padding: 12px 16px; margin: 10px 0; border-radius: 0 6px 6px 0; }
+.sketch-title { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+.sketch-body { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
+.sketch-body em { color: var(--text-dim); font-style: italic; }
+.sketch-script { font-style: italic; color: var(--text-bright); display: block; margin: 6px 0; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 4px; line-height: 1.55; }
+.sketch-meta { font-size: 0.72rem; color: var(--text-dim); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 10px; }
+.sketch-meta span { display: inline-flex; align-items: center; gap: 3px; }
+
+/* GAP CARDS */
+.gap-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+.gap-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.gap-id { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); font-weight: 500; }
+.gap-priority { font-size: 0.62rem; font-weight: 700; padding: 1px 7px; border-radius: 3px; letter-spacing: 0.04em; }
+.priority-p1 { background: rgba(248,113,113,0.15); color: var(--p1); }
+.priority-p2 { background: rgba(251,191,36,0.15); color: var(--p2); }
+.priority-p3 { background: rgba(156,163,175,0.1); color: var(--fail); }
+.gap-desc { font-weight: 600; color: var(--text-bright); font-size: 0.88rem; margin-bottom: 6px; }
+.gap-evidence { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 10px; }
+.gap-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.gap-tag { font-size: 0.62rem; padding: 2px 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); }
+
+/* CONFIDENCE */
+.confidence { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin-top: 10px; }
+.conf-high { background: rgba(52,211,153,0.1); color: var(--win); }
+.conf-mod { background: rgba(96,165,250,0.1); color: var(--hit); }
+.conf-low { background: rgba(251,191,36,0.1); color: var(--warn); }
+
+/* TABS */
+.tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.tab-btn { background: none; border: none; color: var(--text-dim); padding: 10px 16px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.tab-btn:hover { color: var(--text-bright); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* DISTRIBUTION CHART */
+.dist-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin: 8px 0 4px; }
+.dist-segment { display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 600; color: #000; min-width: 20px; transition: flex 0.3s; }
+.dist-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0 14px; }
+.dist-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--text-dim); }
+.dist-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* SORT CONTROLS */
+.sort-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.sort-bar label { font-size: 0.75rem; color: var(--text-dim); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.sort-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim); padding: 6px 14px; font-size: 0.75rem; font-weight: 500; cursor: pointer; border-radius: 6px; font-family: 'DM Sans', sans-serif; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+.sort-btn:hover { border-color: var(--border-light); color: var(--text-bright); }
+.sort-btn.active { background: rgba(94,234,212,0.1); border-color: var(--accent); color: var(--accent); }
+.sort-btn .arrow { font-size: 0.65rem; }
+.total-spend-bar { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 12px; }
+.total-spend-bar b { color: var(--accent); font-size: 0.95rem; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) { .ad-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .ad-grid { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 1.6rem; } .sort-bar { gap: 4px; } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+/* VIDEO MODAL */
+.video-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
+.video-modal-overlay.active { display: flex; }
+.video-modal { position: relative; max-width: 420px; width: 90%; }
+.video-modal video { width: 100%; border-radius: 8px; }
+.video-modal-close { position: absolute; top: -36px; right: 0; background: none; border: none; color: var(--text-bright); font-size: 1.5rem; cursor: pointer; padding: 4px 10px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="container hero-content">
+        <div class="subtitle">Strategic Creative Analysis</div>
+        <h1>Factor</h1>
+        <div class="meta">
+            <span>&#x1F4C5; April 2026</span>
+            <span>&#x1F4CA; 28 Video Ads Analyzed</span>
+            <span>&#x1F3AC; 690 Shot-Level Breakdowns</span>
+            <span>&#x26A0;&#xFE0F; No Performance Data</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <button class="nav-btn active" onclick="showPage('overview')">Intelligence Overview</button>
+            <button class="nav-btn" onclick="showPage('working')">What's Working</button>
+            <button class="nav-btn" onclick="showPage('broken')">What's Broken</button>
+            <button class="nav-btn" onclick="showPage('gaps')">Gaps Table</button>
+            <button class="nav-btn" onclick="showPage('adlib')">Ad Library</button>
+            <button class="nav-btn" onclick="showPage('openqs')">Open Questions</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal-overlay" id="videoModal" onclick="closeVideoModal(event)">
+    <div class="video-modal">
+        <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+        <video id="modalVideo" controls playsinline></video>
+    </div>
+</div>
+
+<div class="container">
+
+<!-- ===== PAGE: OVERVIEW ===== -->
+<div class="page-section active" id="page-overview">
+<div class="output-section">
+    <div class="output-label">Output 1</div>
+    <div class="output-title">Intelligence Overview</div>
+
+    <!-- One Paragraph -->
+    <div class="collapse-section open">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>The Account in One Paragraph</h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content">
+            <div class="one-para">
+                Factor is a chef-prepared meal delivery brand (~$11/meal, evergreen "50% off first box" offer) running 28 active Meta video ads targeting busy adults 25-45 who want healthy meals without cooking. The portfolio's winning layer is narrow and repetitive: <strong>Problem/Solution hooks account for 39% of all ads, Outcome motivator accounts for 54%, and A (Narrative) structure accounts for 68%</strong> &mdash; meaning the majority of the creative portfolio is the same ad wearing different outfits. Five proven mechanisms exist (problem-to-rescue, protein-identity, skeptic/anti-wellness, GLP-1 medical tie-in, visual ASMR), but they run on a single structural rail with near-identical demographic targeting (female, fitness-forward, 25-35). <strong>The central strategic tension: Factor's offer is strong (50% off + free breakfast for a year), its food photography is best-in-class, and its product is genuinely differentiated (heat-and-eat, not cook-from-scratch like HelloFresh) &mdash; yet none of these advantages are deployed as primary hooks.</strong> Zero ads lead with the deal. Zero ads use curiosity gap, pattern interrupt, or aggregate social proof hooks. Zero ads target men, parents, or adults 40+ as primary audiences. The portfolio is optimized for one person &mdash; a woman in her late 20s who goes to the gym and tracks protein &mdash; and leaves the entire rest of Factor's TAM (<em>"anyone who doesn't want to cook"</em>) unaddressed.
+            </div>
+        </div></div>
+    </div>
+
+    <!-- Portfolio Distribution -->
+    <div class="collapse-section open">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>Portfolio Distribution</h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content">
+
+            <h4>Motivator Distribution</h4>
+            <div class="dist-bar">
+                <div class="dist-segment" style="flex:15; background: var(--win);">54%</div>
+                <div class="dist-segment" style="flex:5; background: var(--hit);">18%</div>
+                <div class="dist-segment" style="flex:3; background: var(--purple);">11%</div>
+                <div class="dist-segment" style="flex:5; background: rgba(255,255,255,0.1); color: var(--text-dim);">18% mixed</div>
+            </div>
+            <div class="dist-legend">
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--win)"></div> Outcome (15)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--hit)"></div> Problem (5)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--purple)"></div> Anti-Alt (3)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--danger)"></div> Deal primary: 0</div>
+            </div>
+
+            <h4>Structure Distribution</h4>
+            <div class="dist-bar">
+                <div class="dist-segment" style="flex:19; background: var(--accent);">68%</div>
+                <div class="dist-segment" style="flex:4; background: var(--hit);">14%</div>
+                <div class="dist-segment" style="flex:4; background: var(--purple);">14%</div>
+                <div class="dist-segment" style="flex:1; background: var(--warn);">4%</div>
+            </div>
+            <div class="dist-legend">
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--accent)"></div> A Narrative (19)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--hit)"></div> C Rapid Proof (4)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--purple)"></div> D Testimonial (4)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--warn)"></div> B Listicle (1)</div>
+            </div>
+
+            <h4>Hook Archetype Distribution</h4>
+            <div class="dist-bar">
+                <div class="dist-segment" style="flex:11; background: var(--win);">39%</div>
+                <div class="dist-segment" style="flex:6; background: var(--hit);">21%</div>
+                <div class="dist-segment" style="flex:5; background: var(--purple);">18%</div>
+                <div class="dist-segment" style="flex:3; background: var(--warn);">11%</div>
+                <div class="dist-segment" style="flex:3; background: rgba(255,255,255,0.1); color: var(--text-dim);">11%</div>
+            </div>
+            <div class="dist-legend">
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--win)"></div> Problem/Solution (11)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--hit)"></div> Life Hack (6)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--purple)"></div> Skeptic variants (5)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:var(--warn)"></div> Visual ASMR (3)</div>
+                <div class="dist-legend-item"><div class="dist-dot" style="background:rgba(255,255,255,0.15)"></div> Other (3)</div>
+            </div>
+
+            <div class="callout callout-danger">
+                <strong>&#x1F534; Critical gaps at 0%:</strong> Curiosity Gap hooks (0/28), Pattern Interrupt (0/28), Aggregate Social Proof (0/28), Deal-first hooks (0/28), Listicle structure (1/28)
+            </div>
+
+            <div class="table-wrap">
+            <table>
+                <tr><th>Dimension</th><th>Distribution</th><th>Concentration Risk</th></tr>
+                <tr><td><strong>Motivator</strong></td><td>Outcome 54% &middot; Problem 18% &middot; Anti-Alt 11% &middot; Deal 0%</td><td style="color:var(--danger)">Deal never tested as lead</td></tr>
+                <tr><td><strong>Structure</strong></td><td>Narrative 68% &middot; Rapid Proof 14% &middot; Testimonial 14% &middot; Listicle 4%</td><td style="color:var(--danger)">68% structural homogeneity</td></tr>
+                <tr><td><strong>Duration</strong></td><td>13s&ndash;39s &middot; Median ~29s &middot; Sub-20s: 14%</td><td style="color:var(--warn)">Underweight for Reels/Stories</td></tr>
+                <tr><td><strong>Visual</strong></td><td>UGC ~85% &middot; Product Demo ~10% &middot; ASMR ~5%</td><td style="color:var(--warn)">No voiceless, no split-screen, no text-only</td></tr>
+                <tr><td><strong>Talent</strong></td><td>Female ~85% &middot; Male ~12% &middot; Couples ~3%</td><td style="color:var(--danger)">Male, parent, 40+ near-zero</td></tr>
+            </table>
+            </div>
+        </div></div>
+    </div>
+
+    <!-- Constraints -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>Constraints Quick-Reference</h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content">
+            <div class="table-wrap">
+            <table>
+                <tr><th>Constraint</th><th>Impact</th><th>Workaround</th></tr>
+                <tr><td>No performance data (spend, CPS, thumbstop)</td><td>Cannot rank mechanisms by dollar efficiency</td><td>Analysis based on pattern distribution; layer spend data when available</td></tr>
+                <tr><td>28-ad sample only</td><td>May not reflect full account portfolio</td><td>Treat findings as directional; validate with broader pull</td></tr>
+                <tr><td>No audience delivery data</td><td>Cannot confirm who sees which ads</td><td>Persona gaps based on talent representation, not delivery</td></tr>
+                <tr><td>Offer terms unverified</td><td>"50% off + free breakfast" assumed current</td><td>Verify before producing Deal-hook creative</td></tr>
+                <tr><td>Social proof numbers unverified</td><td>"150M meals" etc. are placeholder estimates</td><td>Verify with Factor before producing social proof ads</td></tr>
+                <tr><td>GLP-1 messaging regulatory risk</td><td>FTC/FDA line on health-adjacent claims</td><td>Keep as personal testimony, not therapeutic claim</td></tr>
+                <tr><td>Competitor pricing directional</td><td>$23 DoorDash is approximate</td><td>Verify before running cost-comparison creative</td></tr>
+            </table>
+            </div>
+        </div></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== PAGE: WHAT'S WORKING ===== -->
+<div class="page-section" id="page-working">
+<div class="output-section">
+    <div class="output-label">Output 2</div>
+    <div class="output-title">What's Working and Why: 6 Proven Mechanisms</div>
+
+    <!-- MECHANISM 1 -->
+    <div class="collapse-section open">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>1. "Problem-to-Rescue" Narrative <span class="badge badge-high">11/28 &middot; 39%</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>The dominant engine of this portfolio. Ads open with a relatable pain point &mdash; no time to cook, eating badly, wasting food &mdash; then introduce Factor as the resolution within the first 3-5 seconds. The mechanism is durable: it appears across UGC testimonials, cinematic formats, and voiceover-driven cuts, suggesting the underlying psychology (not the execution) is what converts.</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>1164828469179513.mp4</strong> &mdash; <em>"I never had time to cook for myself, and when I did, I'd either waste food or eat the same thing for three days straight. Then I found Factor and it fixed all of that."</em> Hook: "Adulting hack: THIS made dinner SO easy." Problem stated in 4 seconds, product by 7.</li>
+                <li><strong>1409766000768579.mp4</strong> &mdash; Man in a tiny home opens an empty fridge (two tomatoes, an artichoke). Opens door to find a Factor box. <strong>Zero voiceover for 7 seconds</strong> &mdash; pure visual storytelling. Highest production value in portfolio.</li>
+                <li><strong>a_120242146545150577.mp4</strong> &mdash; <em>"I'm getting my eating back on track, so I ordered Factor again."</em> Returnee framing &mdash; implies previous purchase and re-conversion.</li>
+                <li><strong>c_1228911435596544.mp4</strong> &mdash; <em>"I'm currently training for a marathon."</em> Identity-first hook that self-selects high-intent audience.</li>
+            </ul>
+            <h4>Why It Works</h4>
+            <p>Problem-first framing activates loss aversion before the product appears. The viewer mentally agrees with the pain ("yeah, I do waste food") before Factor enters, creating a psychological contract where the solution feels earned rather than pitched. The speed of the pivot (problem in 3s, Factor by 5-7s) prevents scroll-away.</p>
+            <div class="confidence conf-high">HIGH CONFIDENCE &mdash; 11 ads, multiple formats, multiple talent, consistent deployment</div>
+        </div></div>
+    </div>
+
+    <!-- MECHANISM 2 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>2. "Protein-as-Identity" Hooks <span class="badge badge-high">8/28 &middot; 29%</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>A significant cluster leads with specific protein metrics as the primary value prop, targeting fitness-conscious viewers who track macros. The mechanism converts a commodity claim ("healthy meals") into a quantified, identity-signaling metric ("50g protein").</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>c_2008561170544264.mp4</strong> (15s) &mdash; <em>"This is how I get up to 50 grams of protein."</em> One of only 4 sub-20s ads. Shortest path to conversion in portfolio.</li>
+                <li><strong>c_850074858050637.mp4</strong> &mdash; <em>"This gets me up to 30 grams of protein before most people."</em> Opens on pancakes. Breakfast positioning &mdash; unique in portfolio.</li>
+                <li><strong>928300873394472.mp4</strong> &mdash; <em>"New to a fitness routine and just figuring out your protein goals? Start here."</em> Beginner-inclusive.</li>
+                <li><strong>c_1295245249321563.mp4</strong> &mdash; <em>"Protein builds muscle. We know that. But fiber's the multiplier."</em> Educational reframe.</li>
+            </ul>
+            <div class="callout callout-warn">&#x26A0;&#xFE0F; <strong>Concentration risk:</strong> This mechanism only works for the fitness-tracking segment. It alienates the much larger audience that doesn't count macros but still wants to eat well. Portfolio needs non-protein hooks to complement this lane.</div>
+            <div class="confidence conf-high">HIGH CONFIDENCE &mdash; 8 ads, consistent copy pattern, clear audience signal</div>
+        </div></div>
+    </div>
+
+    <!-- MECHANISM 3 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>3. "Skeptic / Anti-Wellness" Voice <span class="badge badge-high">5/28 &middot; 18%</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>A distinct creative lane where talent pushes back against wellness culture, fad diets, and processed health foods &mdash; then positions Factor as the pragmatic adult alternative. <strong>This is the portfolio's highest-trust entry point and its most differentiated creative angle.</strong> No competitor in the meal delivery space runs this tone.</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>c_2348392238919369.mp4</strong> &mdash; <em>"I'm in my 30s. I'm done with wellness food trends that taste bad because they won't last."</em> Continues: "This doesn't taste like a diet, like some of the other options out there."</li>
+                <li><strong>c_766099696569574.mp4</strong> &mdash; <em>"If the Mediterranean diet is the best in the world, why aren't you eating it?"</em> On-screen: "Ranked Best Diet in the World*." Authority + confrontation.</li>
+                <li><strong>c_901917822314046.mp4</strong> &mdash; <em>"Skip that cleanse! Your gut actually wants more fiber."</em> Direct confrontation of wellness trends.</li>
+                <li><strong>c_772781162173574.mp4</strong> &mdash; <em>"I don't mess with the ultra-processed bars and all that."</em></li>
+            </ul>
+            <div class="callout callout-danger">&#x1F534; <strong>Underweight:</strong> At 18% of portfolio, this is the strongest mechanism by differentiation but weakest by volume. The Skeptic voice is Factor's competitive moat &mdash; it should be 30-40% of portfolio, not 18%.</div>
+            <div class="confidence conf-high">HIGH CONFIDENCE &mdash; 5 ads, unique tone, no competitive overlap</div>
+        </div></div>
+    </div>
+
+    <!-- MECHANISM 4 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>4. "GLP-1 Companion" Medical Relevance <span class="badge badge-moderate">3/28 &middot; 11%</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>A timely cluster tying Factor to the GLP-1 medication moment &mdash; positioning meals as the nutritional infrastructure for weight-loss drug patients. High-intent, high-LTV audience with a real nutritional problem.</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>c_867880259059514.mp4</strong> (21s) &mdash; <em>"GLP-1 medication helped me start my weight-loss journey, but Factor made it stick."</em> Then: "When my appetite changed, Factor made it easy to eat balanced meals consistently."</li>
+                <li><strong>a_6935789618405.mp4</strong> (22s) &mdash; Same GLP-1 hook, fridge-interior opening.</li>
+                <li><strong>c_1419565600184739.mp4</strong> (24s) &mdash; Same script, Deal secondary closer.</li>
+            </ul>
+            <div class="callout callout-warn">&#x26A0;&#xFE0F; <strong>FTC/FDA note:</strong> These ads use "GLP-1 medication" as self-reported context, not a medical claim. The framing "helped me start... Factor made it stick" is testimonial, not therapeutic. Expansion should be reviewed for implied health claims.</div>
+            <div class="confidence conf-mod">MODERATE CONFIDENCE &mdash; 3 ads, same script across all three, no variation testing</div>
+        </div></div>
+    </div>
+
+    <!-- MECHANISM 5 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>5. "Visual ASMR" Thumbstop Currency <span class="badge badge-high">B-roll in ~70% of ads</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>Close-up sauce pours, steam, fork-lifts, lid-peels, and macro plating shots. Factor's food photography is the best production asset in the portfolio and the single most reusable element.</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>c_772781162173574.mp4</strong> &mdash; Top-down bowl shot, dark dressing pour. Hook: <em>"I have your next hyper-fixation meal right here."</em></li>
+                <li><strong>c_832283942846225.mp4</strong> &mdash; Five sauce pours in five seconds (:21-:26). Strongest food sequence in portfolio.</li>
+                <li><strong>c_901917822314046.mp4</strong> &mdash; Extreme close-up zooms into meatballs, salmon, broccoli. Rapid Proof structure built entirely on macro food photography.</li>
+            </ul>
+            <div class="callout callout-danger">&#x1F534; <strong>Underdeployed as primary format:</strong> Only 3/28 ads use ASMR as primary hook. Every other ad uses it as B-roll. Clear opportunity for voiceless, ASMR-only formats (text overlay + food shots, zero talent) that would be cheapest to produce and most algorithmically diverse.</div>
+            <div class="confidence conf-high">HIGH CONFIDENCE &mdash; present in 70%+ as B-roll, proven as primary in 3, production quality is competitive advantage</div>
+        </div></div>
+    </div>
+
+    <!-- MECHANISM 6 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>6. "Mediterranean Diet Authority" Frame <span class="badge badge-moderate">4-5 ads</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>Multiple ads anchor Factor's credibility to the Mediterranean diet &mdash; independently ranked #1 diet in the world for 7 consecutive years. Borrowed-authority play converting third-party validation into product credibility.</p>
+            <h4>Key Executions</h4>
+            <ul>
+                <li><strong>c_766099696569574.mp4</strong> &mdash; On-screen: "Ranked Best Diet in the World*" in first frame.</li>
+                <li><strong>c_901917822314046.mp4</strong> &mdash; "They're built around the Mediterranean diet, which means healthy fats, fiber-rich veggies, and lean protein."</li>
+                <li><strong>c_1592038872115423.mp4</strong> &mdash; Opens with "The Mediterranean diet is..."</li>
+            </ul>
+            <div class="callout callout-warn">&#x26A0;&#xFE0F; <strong>Over-concentration risk:</strong> If "Mediterranean" becomes Factor's only dietary identity, it limits expansion into keto, high-protein, low-carb frameworks that each have their own audience segments.</div>
+            <div class="confidence conf-mod">MODERATE CONFIDENCE &mdash; 4-5 ads, consistent messaging, no variation against other dietary frameworks</div>
+        </div></div>
+    </div>
+
+</div>
+</div>
+
+<!-- ===== PAGE: WHAT'S BROKEN ===== -->
+<div class="page-section" id="page-broken">
+<div class="output-section">
+    <div class="output-label">Output 3</div>
+    <div class="output-title">What's Broken: 6 Structural Issues</div>
+
+    <!-- ISSUE 1 -->
+    <div class="collapse-section open">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>1. The Deal Void <span class="badge badge-critical">CRITICAL</span> <span class="badge badge-p1">0/28</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>Of 28 ads, <strong>not a single one leads with price, value, or the offer</strong>. "Deal" appears as a secondary motivator in exactly 4 ads, and exclusively in end cards: "50% Off Your First Box + Free Breakfast for 1 Year."</p>
+            <p>This offer is genuinely strong &mdash; 50% off plus a year of free breakfast is aggressive even by DTC standards &mdash; but it has <strong>never been given the chance to be the reason someone watches the ad</strong>.</p>
+            <div class="callout callout-danger">&#x1F534; <strong>The cost of this gap:</strong> Deal-motivated buyers are the highest-volume, lowest-friction segment in DTC subscriptions. On Meta, deal hooks frequently outperform problem/outcome hooks on pure CPA because they compress the decision cycle into the first 3 seconds. Factor's competitors (HelloFresh, Blue Apron) run deal-first creative aggressively. Factor is ceding the entire price-sensitive audience.</div>
+        </div></div>
+    </div>
+
+    <!-- ISSUE 2 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>2. Structural Monoculture <span class="badge badge-critical">CRITICAL</span> <span class="badge badge-p1">68% Narrative</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>19/28 ads use A (Narrative) structure. Listicle has exactly 1 ad. No comparison, split-screen, before/after, day-in-the-life, countdown, or screen-recording formats exist.</p>
+            <div class="table-wrap"><table>
+                <tr><th>Missing Structure</th><th>Count</th><th>What It Serves</th><th>Who It Reaches</th></tr>
+                <tr><td>B (Listicle)</td><td style="color:var(--warn)">1/28</td><td>Skimmers, low-attention</td><td>Reels/Stories audience</td></tr>
+                <tr><td>Comparison / Split-Screen</td><td style="color:var(--danger)">0/28</td><td>Active shoppers</td><td>Mid-funnel considerers</td></tr>
+                <tr><td>Before/After</td><td style="color:var(--danger)">0/28</td><td>Transformation-seekers</td><td>Weight loss, health improvement</td></tr>
+                <tr><td>Screen Recording / UI</td><td style="color:var(--danger)">0/28</td><td>Process-driven viewers</td><td>Pragmatic, conversion-ready</td></tr>
+                <tr><td>Voiceless / Text-Only</td><td style="color:var(--danger)">0/28</td><td>Sound-off environments</td><td>85% of FB video is sound-off</td></tr>
+            </table></div>
+            <div class="callout callout-danger">&#x1F534; <strong>Auction self-competition:</strong> When 68% of ads follow the same structure, the algorithm treats them as near-duplicates. You're bidding against yourself. Structural diversity is the cheapest form of creative diversification.</div>
+        </div></div>
+    </div>
+
+    <!-- ISSUE 3 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>3. Three Hook Archetypes at 0% <span class="badge badge-p1">HIGH</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <ul>
+                <li><strong>Curiosity Gap: 0/28.</strong> No ad uses information-gap hooks ("The one meal that replaced my entire grocery list").</li>
+                <li><strong>Pattern Interrupt: 0/28.</strong> No ad opens with something unexpected or format-breaking.</li>
+                <li><strong>Aggregate Social Proof: 0/28.</strong> No review counts, subscriber numbers, star ratings, or press mentions. All proof is individual testimony.</li>
+            </ul>
+            <p>Curiosity Gap creates an open loop the viewer <em>needs</em> to close. Pattern Interrupt violates the viewer's prediction model, buying 2-3 extra seconds. Aggregate Social Proof resolves a different objection than individual testimony &mdash; it creates inevitability rather than relatability.</p>
+        </div></div>
+    </div>
+
+    <!-- ISSUE 4 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>4. Persona Monoculture <span class="badge badge-p1">HIGH</span> <span class="badge badge-p1">~85% Female Fitness</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <div class="table-wrap"><table>
+                <tr><th>Audience</th><th>Market Signal</th><th>Factor Ads</th><th>Opportunity</th></tr>
+                <tr><td>Men 25-45</td><td>~40-45% of meal kit subs</td><td style="color:var(--danger)">2-3 ads</td><td>"Bachelor who can't cook" is the original meal delivery use case</td></tr>
+                <tr><td>Parents with young kids</td><td>Highest need-state for "no time"</td><td style="color:var(--danger)">1 ad</td><td>Exhausted-parent narrative writes itself</td></tr>
+                <tr><td>Couples</td><td>Portion waste problem</td><td style="color:var(--danger)">1 ad</td><td>Single-serving portioning solves "cooking for two"</td></tr>
+                <tr><td>Adults 40+</td><td>Largest spending-power demo</td><td style="color:var(--danger)">0 ads</td><td>GLP-1 lane signals 40+ relevance but no talent matches</td></tr>
+                <tr><td>Non-fitness professionals</td><td>"I work 60 hours"</td><td style="color:var(--danger)">0 ads</td><td>Convenience without the fitness wrapper</td></tr>
+            </table></div>
+            <div class="callout callout-danger">&#x1F534; The algorithm will find these audiences &mdash; but without matching creative, CPA will be atrocious. Matched-demo creative consistently outperforms mismatched by 20-40% on CPA in DTC.</div>
+        </div></div>
+    </div>
+
+    <!-- ISSUE 5 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>5. Anti-Alternative at 11% <span class="badge badge-p2">HIGH</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>Factor's core product differentiation &mdash; <strong>heat and eat, not cook from scratch</strong> &mdash; is the single strongest competitive argument against HelloFresh, Blue Apron, and every meal kit that requires 30-45 minutes of cooking. But it's never framed as a direct comparison. The portfolio talks about Factor in isolation.</p>
+            <p>Similarly, the cost comparison against takeout ($11/meal vs. $18-25 average) and the health comparison are never visualized. These are easy, visual, side-by-side arguments the portfolio ignores.</p>
+        </div></div>
+    </div>
+
+    <!-- ISSUE 6 -->
+    <div class="collapse-section">
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <h3>6. Short-Form Desert <span class="badge badge-p2">MEDIUM</span> <span class="badge badge-p2">86% over 20s</span></h3>
+            <span class="collapse-arrow">&#x25BE;</span>
+        </div>
+        <div class="collapse-body"><div class="collapse-content prose">
+            <p>Only 4 of 28 ads are under 20 seconds. The median is ~29 seconds. Reels and Stories placements favor 6-15 second cuts. Factor has strong 3-5 second hook moments (sauce pours, bold text overlays) that could be recut into short-form variants with zero new production. The raw material exists. The cuts don't.</p>
+        </div></div>
+    </div>
+
+</div>
+</div>
+
+<!-- ===== PAGE: GAPS TABLE ===== -->
+<div class="page-section" id="page-gaps">
+<div class="output-section">
+    <div class="output-label">Output 4</div>
+    <div class="output-title">Refined Gaps Table &mdash; 10 Gap Cards</div>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="showTab('tier1', this)">Tier 1: Low Lift</button>
+        <button class="tab-btn" onclick="showTab('tier2', this)">Tier 2: Medium Lift</button>
+        <button class="tab-btn" onclick="showTab('tier3', this)">Tier 3: Strategic Bets</button>
+    </div>
+
+    <!-- TIER 1 -->
+    <div class="tab-content active" id="tab-tier1">
+
+    <!-- CG-1 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-1</span>
+            <span class="gap-priority priority-p1">P1</span>
+            <span class="gap-tag">ADAPT</span>
+            <span class="gap-tag">Deal Hooks</span>
+        </div>
+        <div class="gap-desc">Zero deal-first hooks in 28 ads</div>
+        <div class="gap-evidence">0/28 Deal-primary. 4/28 Deal-secondary (end card only). "50% Off + Free Breakfast for 1 Year" has never been tested as a primary hook.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "The Math" (Text-on-Screen + Food ASMR)</div>
+            <div class="sketch-body">
+                <p>No talent. Top-down food shots (sauce pours from c_832283942846225 and c_901917822314046). Bold kinetic text on black:</p>
+                <div class="sketch-script">"Average DoorDash order: $23. Average Factor meal: $5.50." [Sauce pour over salmon.] "Chef-prepared. Dietitian-approved. Ready in 2 minutes." [Fork lift of meatball.] "50% off your first box. Free breakfast for a year." [End card.]</div>
+                <div class="sketch-meta">
+                    <span>&#x1F4CF; 10-12s</span>
+                    <span>&#x1F3AC; Voiceless</span>
+                    <span>&#x1F3AF; Deal + Anti-Alt</span>
+                    <span>&#x1F504; ADAPT &mdash; existing B-roll</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "Why I Stopped Ordering Takeout" (UGC + Deal Pivot)</div>
+            <div class="sketch-body">
+                <p>Female or male talent, 28-35, casual kitchen:</p>
+                <div class="sketch-script">"I used to spend like $600 a month on DoorDash. Six hundred. And half of it was cold by the time it got here. Now I spend $180 on Factor &mdash; chef-prepared meals, ready in two minutes, and I actually know what I'm eating. Oh, and right now it's 50% off your first box plus free breakfast for a year. So yeah, do the math."</div>
+                <div class="sketch-meta">
+                    <span>&#x1F4CF; 18-22s</span>
+                    <span>&#x1F3AF; Deal + Anti-Alt</span>
+                    <span>&#x1F504; NEW talent, proven register</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 3 &mdash; "50% Off &mdash; Why Are You Still Scrolling?"</div>
+            <div class="sketch-body">
+                <p>Take first 5s of c_766099696569574 (sauce pour + "Ranked Best Diet"). Hard cut to bold white-on-black text: <strong>"50% OFF YOUR FIRST BOX."</strong> Beat. <strong>"+ FREE BREAKFAST FOR A YEAR."</strong> 3s food montage. End card.</p>
+                <div class="sketch-meta">
+                    <span>&#x1F4CF; 12s</span>
+                    <span>&#x1F3AC; Zero new production</span>
+                    <span>&#x1F504; ADAPT &mdash; existing footage only</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-2 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-2</span>
+            <span class="gap-priority priority-p1">P1</span>
+            <span class="gap-tag">ADAPT</span>
+            <span class="gap-tag">Short-Form Cuts</span>
+        </div>
+        <div class="gap-desc">Only 4 of 28 ads under 20s &mdash; portfolio is 86% long-form</div>
+        <div class="gap-evidence">Median 29s. Reels/Stories favor 6-15s. Multiple proven hook moments exist but haven't been isolated.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "Sauce Pour Supercut" (Voiceless, Text-Only)</div>
+            <div class="sketch-body">
+                <p>Compile 5-6 strongest sauce-pour shots: orange dressing (a_6935789616605), white sauce on meatballs (c_832283942846225, :21), dark sauce on chicken (:25), green pesto on shrimp (c_802250039568009, :11). Each pour = 1.2s. Bold kinetic text over each.</p>
+                <div class="sketch-script">"CHEF-PREPARED." / "DIETITIAN-APPROVED." / "READY IN 2 MINUTES." / "100+ OPTIONS WEEKLY." / "50% OFF FIRST BOX."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 8s</span> <span>&#x1F3AC; No talent, no VO</span> <span>&#x1F504; ADAPT &mdash; existing footage</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "Hook Isolation Pack" (5x 6-8s Reels)</div>
+            <div class="sketch-body">
+                <p>5 standalone Reels from strongest hooks: "This is how I get 50g protein" (c_2008561170544264), "Skip that cleanse" (c_901917822314046), "I'm in my 30s" (c_2348392238919369), "If the Mediterranean diet is the best" (c_766099696569574), "GLP-1 helped me start" (c_867880259059514). Each = hook + 2s food B-roll + end card.</p>
+                <div class="sketch-meta"><span>&#x1F4CF; 6-8s each</span> <span>&#x1F3AC; 5 ads from zero new footage</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-3 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-3</span>
+            <span class="gap-priority priority-p1">P1</span>
+            <span class="gap-tag">ADAPT</span>
+            <span class="gap-tag">Curiosity Gap Hooks</span>
+        </div>
+        <div class="gap-desc">0/28 ads use curiosity gap or open-loop hooks</div>
+        <div class="gap-evidence">All 28 ads use declarative openers. Zero information gaps. Zero open loops.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "I Quit Cooking 6 Months Ago"</div>
+            <div class="sketch-body">
+                <p>Text on black: <strong>"I quit cooking 6 months ago."</strong> Beat. <strong>"Here's what happened."</strong> Cut to: gym B-roll (c_2348392238919369, :13-:14), eating + smiling (:15), Factor meals in fridge (:16).</p>
+                <div class="sketch-script">"More energy. Better skin. Zero dishes. Turns out the secret to eating well... is not cooking at all."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 15-18s</span> <span>&#x1F504; ADAPT &mdash; existing B-roll from Skeptic ads</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "I Tested 5 Meal Kits. Only 1 Survived."</div>
+            <div class="sketch-body">
+                <p>Rapid text cards on black: <strong>"HelloFresh."</strong> [X mark.] <strong>"Blue Apron."</strong> [X.] <strong>"Home Chef."</strong> [X.] <strong>"Daily Harvest."</strong> [X.] <strong>"Factor."</strong> [Pause.] Cut to talent eating: "It's the only one where I don't have to cook. That's it."</p>
+                <div class="sketch-meta"><span>&#x1F4CF; 15s</span> <span>&#x1F3AF; Anti-Alternative</span> <span>&#x1F504; NEW talent + text cards</span></div>
+            </div>
+        </div>
+    </div>
+
+    </div><!-- /tier1 -->
+
+    <!-- TIER 2 -->
+    <div class="tab-content" id="tab-tier2">
+
+    <!-- CG-4 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-4</span>
+            <span class="gap-priority priority-p1">P1</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Male-Targeted Creative</span>
+        </div>
+        <div class="gap-desc">~85% female talent. Zero ads speak to "bachelor who can't cook"</div>
+        <div class="gap-evidence">22-24/28 feature female primary talent. Male delivery on Meta is typically 40-55% for meal delivery brands.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "Bachelor Fridge" (Male 25-35)</div>
+            <div class="sketch-body">
+                <p>Male talent, 28-32, alone in apartment. Opens fridge: beer, hot sauce, mystery Tupperware. Direct to camera, dry:</p>
+                <div class="sketch-script">"My fridge has been a crime scene for three years. There's stuff in there from the Obama administration. But last month I started getting Factor and &mdash; hold on." [Opens fridge: stacked Factor meals, organized, clean.] "Now I eat chef-prepared meals every night and I haven't cooked a single thing. I don't know how to cook. I'm not going to learn. And for the first time in my life, my fridge doesn't scare me."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 22-25s</span> <span>&#x1F3AF; Problem</span> <span>&#x1F3AC; A (Narrative)</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "Chicken, Rice, Sadness" (Male 25-40)</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"I've been eating the same three things for two years. Chicken. Rice. Sadness. I know how to make exactly one meal and it's boring as hell. My girlfriend found Factor and now I eat like a different person. Salmon with pesto. Steak with mashed potatoes. Meatballs in cream sauce. All I do is microwave it. I still can't cook. I just don't have to."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 20-25s</span> <span>&#x1F3AF; Problem + Anti-Alt</span> <span>&#x1F3AC; D (Testimonial)</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 3 &mdash; "Dad Mode" (Male 35-45, Parent)</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"My wife asks me to handle dinner once and I pull out Factor like a magician. Two minutes. Salmon for her, steak for me, mac and cheese for the kids because they won't eat anything else. Everyone's fed. Nobody cooked. That's dad mode."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 18-22s</span> <span>&#x1F3AF; Outcome</span> <span>&#x1F3AC; A (Narrative)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-5 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-5</span>
+            <span class="gap-priority priority-p1">P1</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Comparison / Anti-Alternative</span>
+        </div>
+        <div class="gap-desc">Anti-Alternative at 11%. Zero side-by-side comparisons.</div>
+        <div class="gap-evidence">Factor's core advantage (heat-and-eat vs. cook-from-scratch) is never directly compared against alternatives.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "Split Screen: Your Dinner vs. Factor" (Voiceless)</div>
+            <div class="sketch-body">
+                <p><strong>Left side:</strong> Person comes home. Opens Uber Eats. Scrolls. Adds fees. Waits 37 minutes. Food arrives lukewarm.<br>
+                <strong>Right side:</strong> Person opens fridge. Grabs Factor. Microwaves. Eats. Timer reads 2:04.</p>
+                <p>Text card: <strong>"Same evening. Better meal. $5.50."</strong></p>
+                <div class="sketch-meta"><span>&#x1F4CF; 20-25s</span> <span>&#x1F3AF; Anti-Alt + Deal</span> <span>&#x1F3AC; C (Rapid Proof)</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "Meal Kit Dropout"</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"I tried HelloFresh. It took 45 minutes and I burned the chicken. I tried Blue Apron. The ingredients were great but I have to julienne a shallot? I'm not a chef. I tried Freshly but they shut down. Then I found Factor. You take it out of the fridge. You microwave it. You eat it. That's it. It's the only meal delivery where the delivery is the meal."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 25-30s</span> <span>&#x1F3AF; Anti-Alternative</span> <span>&#x1F3AC; D (Testimonial)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-6 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-6</span>
+            <span class="gap-priority priority-p2">P2</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Social Proof at Scale</span>
+        </div>
+        <div class="gap-desc">0/28 ads cite aggregate social proof</div>
+        <div class="gap-evidence">Every ad relies on single-person testimonials. No review counts, subscriber numbers, star ratings.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "The Numbers" (Rapid Proof, Voiceless)</div>
+            <div class="sketch-body">
+                <p>Black screen. Bold white text. Food ASMR between each card:</p>
+                <div class="sketch-script">"150 million meals delivered." [Sauce pour.] "4.5 stars on the App Store." [Fork lift.] "35+ new meals every week." [Lid peel, steam.] "Ready in 2 minutes." [Plated meal.] "50% off your first box." [End card.]</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 10s</span> <span>&#x1F3AC; No talent</span> <span>&#x26A0;&#xFE0F; Verify all numbers with Factor</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-7 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-7</span>
+            <span class="gap-priority priority-p2">P2</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Parent/Family Targeting</span>
+        </div>
+        <div class="gap-desc">1/28 ads features a parent. Zero family dinner scenes.</div>
+        <div class="gap-evidence">Parents with young children are a high-need, high-LTV audience completely unaddressed.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "9 PM Dinner" (Exhausted Parent)</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"It's 9 PM. The kids are finally down. I haven't eaten since the goldfish crackers I stole off their plate at 3. Every night I think about cooking and every night I end up eating cereal over the sink. Now I eat an actual meal. Salmon. Mashed potatoes. Green beans. In two minutes. Without waking anyone up. You deserve more than cereal for dinner."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 25-30s</span> <span>&#x1F3AF; Problem</span> <span>&#x1F3AC; A (Narrative)</span></div>
+            </div>
+        </div>
+    </div>
+
+    </div><!-- /tier2 -->
+
+    <!-- TIER 3 -->
+    <div class="tab-content" id="tab-tier3">
+
+    <!-- CG-8 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-8</span>
+            <span class="gap-priority priority-p2">P2</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Pattern Interrupt</span>
+        </div>
+        <div class="gap-desc">0/28 ads use pattern interrupt or unconventional formats</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "ASMR-Only, Zero Talking"</div>
+            <div class="sketch-body">
+                <p>Full 20s. No voice. No talent face. Just food.</p>
+                <div class="sketch-script">[0-3s] Lid peel. Steam rises. Sizzle sound. [3-6s] Sauce pour &mdash; slow, thick, over salmon. [6-9s] Fork cuts into steak. Juice pools. [9-12s] Overhead pan across 6 meals. [12-15s] Microwave door opens. Hand pulls steaming tray. [15-18s] Fork lifts perfect bite. [18-20s] Text: "Chef-prepared. $5.50/meal. Factor."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 20s</span> <span>&#x1F3AC; Cheapest production possible</span> <span>&#x1F9EA; Tests food-only conversion</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "The Unboxing Timer"</div>
+            <div class="sketch-body">
+                <p>Single overhead camera. No cuts. Timer starts at 0:00. Hands open box, pull meal, microwave, peel lid, first bite. Timer reads <strong>1:47</strong>.</p>
+                <div class="sketch-script">"From box to bite. Under two minutes."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 15s (time-lapsed)</span> <span>&#x1F3AC; PROOF format</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-9 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-9</span>
+            <span class="gap-priority priority-p2">P2</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Listicle Structures</span>
+        </div>
+        <div class="gap-desc">1/28 ads uses Listicle structure. Portfolio is 68% Narrative.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "5 Reasons I Quit Cooking"</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"Five reasons I quit cooking. One: I was spending more time at the grocery store than the gym. Two: I'd cook a recipe once, hate it, and waste $40 in ingredients. Three: Dishes. Just... dishes. Four: I realized meal delivery exists where they actually cook it FOR you. Five: It's $5.50 a meal. I was spending triple that on takeout. Factor. I haven't touched a pan in six months."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 25-30s</span> <span>&#x1F3AF; Problem + Deal</span> <span>&#x1F3AC; B (Listicle)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CG-10 -->
+    <div class="gap-card">
+        <div class="gap-header">
+            <span class="gap-id">CG-10</span>
+            <span class="gap-priority priority-p3">P3</span>
+            <span class="gap-tag">NEW</span>
+            <span class="gap-tag">Older Demo / Non-Fitness</span>
+        </div>
+        <div class="gap-desc">Zero representation of adults 40+. Zero non-fitness positioning.</div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 1 &mdash; "I Don't Count Macros" (Age 42-50)</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"I don't count macros. I don't go to the gym. I don't track my steps. I just want to eat a real meal at the end of the day without spending an hour cooking it. I'm not trying to get shredded &mdash; I'm trying to not eat cereal for dinner three nights a week. Factor sends me chef-prepared meals. I heat them up. I eat something that actually has vegetables in it. That's the whole pitch. No protein goals. No cleanses. Just food."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 25-30s</span> <span>&#x1F3AF; Outcome</span> <span>&#x1F9EA; Tests TAM expansion beyond fitness</span></div>
+            </div>
+        </div>
+
+        <div class="sketch">
+            <div class="sketch-title">Sketch 2 &mdash; "My Doctor Said Change Your Diet" (Age 50-60)</div>
+            <div class="sketch-body">
+                <div class="sketch-script">"My doctor told me I needed to change my diet. Lower sodium, more vegetables, less processed food. I didn't know where to start. I tried cooking Mediterranean recipes &mdash; took me an hour every night and half the ingredients I couldn't find. Then my daughter told me about Factor. Mediterranean meals, already made, ready in two minutes. My doctor actually approved them. I've been eating better for three months without spending a single evening in the kitchen."</div>
+                <div class="sketch-meta"><span>&#x1F4CF; 28-33s</span> <span>&#x1F3AF; Problem + Outcome</span> <span>&#x1F3AC; D (Testimonial)</span></div>
+            </div>
+        </div>
+    </div>
+
+    </div><!-- /tier3 -->
+
+</div>
+</div>
+
+<!-- ===== PAGE: AD LIBRARY ===== -->
+<div class="page-section" id="page-adlib">
+<div class="output-section">
+    <div class="output-label">Reference</div>
+    <div class="output-title">Ad Library &mdash; All 28 Ads</div>
+
+    <div class="total-spend-bar" id="totalSpendBar"></div>
+
+    <div class="sort-bar">
+        <label>Sort by:</label>
+        <button class="sort-btn active" id="sort-spend-desc" onclick="sortAds('spend','desc')">Spend <span class="arrow">&#x25BC;</span></button>
+        <button class="sort-btn" id="sort-spend-asc" onclick="sortAds('spend','asc')">Spend <span class="arrow">&#x25B2;</span></button>
+        <button class="sort-btn" id="sort-launch-desc" onclick="sortAds('launch','desc')">Launch (Latest) <span class="arrow">&#x25BC;</span></button>
+        <button class="sort-btn" id="sort-launch-asc" onclick="sortAds('launch','asc')">Launch (Earliest) <span class="arrow">&#x25B2;</span></button>
+        <button class="sort-btn" id="sort-ts-desc" onclick="sortAds('thumbstop','desc')">Thumbstop <span class="arrow">&#x25BC;</span></button>
+    </div>
+
+    <div class="ad-grid" id="adGrid"></div>
+</div>
+</div>
+
+<!-- ===== PAGE: OPEN QUESTIONS ===== -->
+<div class="page-section" id="page-openqs">
+<div class="output-section">
+    <div class="output-label">Reference</div>
+    <div class="output-title">Open Questions</div>
+    <div class="table-wrap">
+    <table>
+        <tr><th>#</th><th>Question</th><th>Resolution Path</th><th>Priority</th></tr>
+        <tr><td>1</td><td><strong>What is Factor's actual spend and CPS across these 28 ads?</strong></td><td>Pull from Meta Ads Manager or request from Factor media team</td><td style="color:var(--p1)">P1</td></tr>
+        <tr><td>2</td><td><strong>What does audience delivery look like by gender and age?</strong></td><td>Meta Ads Manager audience breakdown</td><td style="color:var(--p1)">P1</td></tr>
+        <tr><td>3</td><td><strong>Is the "50% off + free breakfast" offer evergreen or promotional?</strong></td><td>Confirm with Factor brand team</td><td style="color:var(--p1)">P1</td></tr>
+        <tr><td>4</td><td><strong>What are Factor's verified social proof numbers?</strong> (meals delivered, app rating, review count)</td><td>Factor marketing team</td><td style="color:var(--p2)">P2</td></tr>
+        <tr><td>5</td><td><strong>Does Factor have existing male talent footage?</strong></td><td>Request asset library audit</td><td style="color:var(--p2)">P2</td></tr>
+        <tr><td>6</td><td><strong>What is Factor's actual cost per meal at different plan sizes?</strong></td><td>Factor pricing page or account team</td><td style="color:var(--p2)">P2</td></tr>
+        <tr><td>7</td><td><strong>Does Factor have compliance guidelines around competitor naming?</strong></td><td>Factor legal/brand team</td><td style="color:var(--p2)">P2</td></tr>
+        <tr><td>8</td><td><strong>What is Factor's current creative testing structure?</strong></td><td>Factor media buyer or account team</td><td style="color:var(--p2)">P2</td></tr>
+    </table>
+    </div>
+</div>
+</div>
+
+</div><!-- /container -->
+
+<div style="height: 80px;"></div>
+
+<script>
+// Ad data with performance metrics and S3 URLs
+const ads = [
+    { file: "25166412416385147.mp4", dur: "34s", hook: "Life Hack", structure: "D", motivator: "Outcome", spend: 1607799, thumbstop: 16.9, launch: "2025-12-15", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/25166412416385147.mp4" },
+    { file: "1409766000768579.mp4", dur: "39s", hook: "Problem/Solution", structure: "A", motivator: "Problem", spend: 1285610, thumbstop: 43.8, launch: "2026-01-09", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/1409766000768579.mp4" },
+    { file: "c_1181639560834095.mp4", dur: "13s", hook: "Visual ASMR", structure: "C", motivator: "Outcome", spend: 798429, thumbstop: 12.5, launch: "2026-01-06", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1181639560834095.mp4" },
+    { file: "c_832283942846225.mp4", dur: "33s", hook: "Visual ASMR", structure: "B", motivator: "Outcome", spend: 591318, thumbstop: 36.8, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_832283942846225.mp4" },
+    { file: "a_6945439157005.mp4", dur: "29s", hook: "Problem/Solution", structure: "D", motivator: "Outcome", spend: 573141, thumbstop: 18.0, launch: "2026-03-14", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/a_6945439157005.mp4" },
+    { file: "1164828469179513.mp4", dur: "30s", hook: "Life Hack", structure: "A", motivator: "Problem", spend: 556434, thumbstop: 21.1, launch: "2025-12-04", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/1164828469179513.mp4" },
+    { file: "c_1592038872115423.mp4", dur: "23s", hook: "Problem/Solution", structure: "A", motivator: "Outcome", spend: 499348, thumbstop: 15.2, launch: "2025-12-30", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1592038872115423.mp4" },
+    { file: "c_867880259059514.mp4", dur: "21s", hook: "Honest/Medical", structure: "A", motivator: "Outcome", spend: 398708, thumbstop: 16.4, launch: "2025-12-23", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_867880259059514.mp4" },
+    { file: "c_1258497959650091.mp4", dur: "32s", hook: "Us vs. Them", structure: "A", motivator: "Anti-Alt", spend: 380634, thumbstop: 13.2, launch: "2025-12-16", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1258497959650091.mp4" },
+    { file: "a_6935789618405.mp4", dur: "22s", hook: "Problem/Solution", structure: "D", motivator: "Outcome", spend: 350216, thumbstop: 8.6, launch: "2026-02-24", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/a_6935789618405.mp4" },
+    { file: "c_901917822314046.mp4", dur: "35s", hook: "Honest/Skeptic", structure: "C", motivator: "Outcome", spend: 254670, thumbstop: 6.7, launch: "2026-01-22", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_901917822314046.mp4" },
+    { file: "a_6935789616605.mp4", dur: "14s", hook: "Direct Benefit", structure: "C", motivator: "Outcome", spend: 247198, thumbstop: 12.2, launch: "2026-02-24", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/a_6935789616605.mp4" },
+    { file: "c_1419565600184739.mp4", dur: "24s", hook: "Testimonial", structure: "D", motivator: "Outcome", spend: 222340, thumbstop: 6.5, launch: "2026-01-22", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1419565600184739.mp4" },
+    { file: "c_2008561170544264.mp4", dur: "15s", hook: "Life Hack", structure: "A", motivator: "Problem", spend: 194301, thumbstop: 19.3, launch: "2026-02-27", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_2008561170544264.mp4" },
+    { file: "c_1295245249321563.mp4", dur: "29s", hook: "Problem/Solution", structure: "A", motivator: "Outcome", spend: 157683, thumbstop: 16.6, launch: "2026-02-27", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1295245249321563.mp4" },
+    { file: "c_1925991388127459.mp4", dur: "30s", hook: "Life Hack", structure: "A", motivator: "Problem", spend: 144436, thumbstop: 12.6, launch: "2026-03-06", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1925991388127459.mp4" },
+    { file: "1586030742518325.mp4", dur: "29s", hook: "Direct Address", structure: "A", motivator: "Outcome", spend: 137767, thumbstop: 33.7, launch: "2026-02-05", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/1586030742518325.mp4" },
+    { file: "c_850074858050637.mp4", dur: "22s", hook: "Life Hack", structure: "A", motivator: "Outcome", spend: 120256, thumbstop: 25.4, launch: "2026-02-27", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_850074858050637.mp4" },
+    { file: "c_1611134613636768.mp4", dur: "31s", hook: "Problem/Solution", structure: "A", motivator: "Problem", spend: 117116, thumbstop: 8.2, launch: "2026-01-22", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/748678156747553/c_1611134613636768.mp4" },
+    { file: "928300873394472.mp4", dur: "29s", hook: "Problem/Solution", structure: "A", motivator: "Outcome", spend: 116995, thumbstop: 15.3, launch: "2026-03-03", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/928300873394472.mp4" },
+    { file: "c_1038179612708663.mp4", dur: "17s", hook: "Confrontation", structure: "A", motivator: "Anti-Alt", spend: 110183, thumbstop: 10.8, launch: "2026-02-28", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/748678156747553/c_1038179612708663.mp4" },
+    { file: "c_802250039568009.mp4", dur: "28s", hook: "Honest/Transform", structure: "A", motivator: "Outcome", spend: 108367, thumbstop: 26.2, launch: "2026-02-27", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_802250039568009.mp4" },
+    { file: "c_2348392238919369.mp4", dur: "31s", hook: "Skeptic/Honesty", structure: "A", motivator: "Anti-Alt", spend: 103367, thumbstop: 8.2, launch: "2026-03-03", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_2348392238919369.mp4" },
+    { file: "c_766099696569574.mp4", dur: "31s", hook: "Skeptic/Honesty", structure: "A", motivator: "Outcome", spend: 100771, thumbstop: 20.1, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_766099696569574.mp4" },
+    { file: "c_772781162173574.mp4", dur: "27s", hook: "Visual ASMR", structure: "A", motivator: "Outcome", spend: 99162, thumbstop: 14.4, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_772781162173574.mp4" },
+    { file: "a_120242146545150577.mp4", dur: "33s", hook: "Problem/Solution", structure: "A", motivator: "Problem", spend: 80618, thumbstop: 24.6, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/406576800701064/a_120242146545150577.mp4" },
+    { file: "c_1913044375979671.mp4", dur: "23s", hook: "Problem/Solution", structure: "C", motivator: "Problem", spend: 76789, thumbstop: 7.7, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/748678156747553/c_1913044375979671.mp4" },
+    { file: "c_1228911435596544.mp4", dur: "30s", hook: "Problem/Solution", structure: "A", motivator: "Problem", spend: 73525, thumbstop: 24.3, launch: "", s3: "https://datateam-ts-assets.s3.amazonaws.com/video_history/10151421846517319/c_1228911435596544.mp4" }
+];
+
+let currentSort = { field: 'spend', dir: 'desc' };
+
+function formatSpend(n) {
+    if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+    if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+}
+
+function formatLaunch(d) {
+    if (!d) return '<span style="color:var(--text-dim);font-size:0.65rem">N/A</span>';
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function sortAds(field, dir) {
+    currentSort = { field, dir };
+    // Update active button
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sort-' + field + '-' + dir).classList.add('active');
+    buildAdLibrary();
+}
+
+function buildAdLibrary() {
+    const sorted = [...ads].sort((a, b) => {
+        const f = currentSort.field;
+        const d = currentSort.dir === 'desc' ? -1 : 1;
+        if (f === 'launch') {
+            const aVal = a.launch || '0000-00-00';
+            const bVal = b.launch || '0000-00-00';
+            return d * aVal.localeCompare(bVal);
+        }
+        return d * ((a[f] || 0) - (b[f] || 0));
+    });
+
+    // Total spend
+    const total = ads.reduce((s, a) => s + a.spend, 0);
+    document.getElementById('totalSpendBar').innerHTML = 'Total portfolio spend: <b>' + formatSpend(total) + '</b> across <b>28</b> video ads';
+
+    const grid = document.getElementById('adGrid');
+    grid.innerHTML = sorted.map((ad, i) => `
+        <div class="ad-card">
+            <div class="ad-rank">#${i+1}</div>
+            <div class="ad-media">
+                <video controls preload="none" playsinline>
+                    <source src="${ad.s3}" type="video/mp4">
+                </video>
+            </div>
+            <div class="ad-info">
+                <div class="ad-name" title="${ad.file}">${ad.file}</div>
+                <div class="ad-tags">
+                    <span class="ad-tag tag-hook">${ad.hook}</span>
+                    <span class="ad-tag tag-motivator">${ad.motivator}</span>
+                    <span class="ad-tag tag-structure">${ad.structure}</span>
+                </div>
+                <div class="ad-metrics">
+                    <span class="metric"><b style="color:var(--accent)">${formatSpend(ad.spend)}</b> spend</span>
+                    <span class="metric"><b>${ad.thumbstop}%</b> TS</span>
+                </div>
+                <div class="ad-metrics" style="margin-top:4px">
+                    <span class="metric"><b>${ad.dur}</b></span>
+                    <span class="metric">Launched ${formatLaunch(ad.launch)}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Re-attach lazy loading
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.tagName === 'VIDEO' && !entry.target.dataset.loaded) {
+                entry.target.load();
+                entry.target.dataset.loaded = 'true';
+            }
+        });
+    }, { threshold: 0.1 });
+    grid.querySelectorAll('video').forEach(v => observer.observe(v));
+}
+
+function toggleCollapse(header) {
+    header.parentElement.classList.toggle('open');
+}
+
+function showPage(id) {
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function showTab(id, btn) {
+    const parent = btn.closest('.output-section') || btn.closest('.page-section');
+    parent.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+}
+
+function openVideoModal(src) {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('modalVideo');
+    video.src = src;
+    modal.classList.add('active');
+    video.play();
+}
+
+function closeVideoModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('video-modal-close')) return;
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('modalVideo');
+    video.pause();
+    video.src = '';
+    modal.classList.remove('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    buildAdLibrary();
+
+    // Lazy load videos for non-adlib pages
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const video = entry.target;
+                if (video.tagName === 'VIDEO' && !video.dataset.loaded) {
+                    video.load();
+                    video.dataset.loaded = 'true';
+                }
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('video').forEach(v => observer.observe(v));
+});
+</script>
+</body>
+</html>
