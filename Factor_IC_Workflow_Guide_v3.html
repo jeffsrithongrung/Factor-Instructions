@@ -347,6 +347,108 @@
   }
   .sim-text em { color: var(--text-dim); font-style: italic; }
 
+  /* ── Asset Library ── */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0;
+  }
+  .filter-pill {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-pill:hover { color: var(--text-secondary); border-color: var(--text-dim); }
+  .filter-pill.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 20px 0 8px;
+  }
+  .filter-label:first-child { margin-top: 0; }
+  .search-input {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 14px 10px 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 8px;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-wrap {
+    position: relative;
+  }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  .asset-table th {
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 12px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .asset-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+  .asset-table tr:last-child td { border-bottom: none; }
+  .asset-table tr.hidden { display: none; }
+  .asset-table tr:hover td { background: var(--surface-hover); }
+  .star { color: var(--accent); }
+  .hookswap { color: var(--coral); font-size: 11px; }
+  .asset-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .no-results {
+    text-align: center;
+    padding: 32px;
+    color: var(--text-dim);
+    font-size: 14px;
+    display: none;
+  }
+
   /* ── Responsive ── */
   @media (max-width: 640px) {
     .header h1 { font-size: 26px; }
@@ -371,6 +473,7 @@
   <!-- ════════ TAB BAR ════════ -->
   <div class="tab-bar">
     <button class="tab-btn active" data-tab="start">Start Here</button>
+    <button class="tab-btn" data-tab="library">Asset Library</button>
     <button class="tab-btn" data-tab="write">Write</button>
     <button class="tab-btn" data-tab="scale">Scale</button>
     <button class="tab-btn" data-tab="ideate">Ideate</button>
@@ -392,7 +495,7 @@
       <table class="ref-table">
         <tr>
           <td style="width:140px;"><strong>1. Lane</strong></td>
-          <td>Which marketing lane or audience angle? (Protein, Mediterranean, GLP-1, Convenience, Mom, Dad, Skeptic, Salad, Fiber, Breakfast, Weight Loss)</td>
+          <td>Which marketing lane or audience angle? (Protein, Mediterranean, GLP-1, Convenience, Mom, Dad, Skeptic, Salad, Fiber, Breakfast, Weight Loss)<br><br><em style="color:var(--teal);">New lane not listed?</em> That's fine — name it anyway (e.g. "seed oil," "couples," "cooking for one"). Claude will treat it as a NEW job and use generative methods. No existing assets required.</td>
         </tr>
         <tr>
           <td><strong>2. Funnel Stage</strong></td>
@@ -407,6 +510,10 @@
 
     <div class="callout callout-info">
       <strong>Rule of thumb:</strong> Constrained briefs beat broad ones every time. "Fiber lane, Structure B, FF, Mistake/Warning hook" will produce sharper output than "write me a good script."
+    </div>
+
+    <div class="callout callout-success">
+      <strong>New or low-coverage lanes:</strong> Claude works with any lane — even ones with zero library assets. For lanes with fewer than 3 existing assets, Claude will flag that confidence is lower and treat concepts as hypotheses for testing. It uses three generative methods (Problem-First, Cultural Moment, Competitive Gap) instead of scaling from winners. Use NEW as your job type and the Ideate workflow.
     </div>
 
     <h3>What Claude Does First</h3>
@@ -449,6 +556,18 @@
     </div>
 
     <div class="sim-chat">
+      <div class="sim-header">Good brief — new lane with no library assets</div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-ic">You</div>
+        <div class="sim-text">NEW. Seed oil lane, FF. Want to position Factor's "no seed oils" as the hook for health-conscious viewers who are already aware of the seed oil conversation. Structure A or B.</div>
+      </div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-claude">Claude</div>
+        <div class="sim-text"><em>Claude flags this is a zero-asset lane, treats output as hypotheses, and uses generative methods (Problem-First, Cultural Moment, Competitive Gap) instead of scaling from winners.</em></div>
+      </div>
+    </div>
+
+    <div class="sim-chat">
       <div class="sim-header">Vague brief — Claude will ask before generating</div>
       <div class="sim-msg">
         <div class="sim-role sim-role-ic">You</div>
@@ -470,6 +589,115 @@
       <span class="tag tag-purple">Motivator</span>
     </div>
     <p>Format: <code style="font-family:var(--font-mono);font-size:13px;background:var(--surface);padding:2px 8px;border-radius:4px;">[NEW | Protein | B - Listicle | Skeptic/Honesty | M-PROBLEM]</code></p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: ASSET LIBRARY                          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-library" class="tab-content">
+
+    <h2>Asset Library</h2>
+    <p>All 42 winning ads in the library. Use this to find assets for SCALE (MORE/ADAPT) jobs. <strong>★ = Top Performer. ⚠️ = Hook-swap (shares body footage — not independent creative).</strong></p>
+
+    <div class="card">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" id="asset-search" placeholder="Search by name, lane, hook archetype…" oninput="filterAssets()">
+      </div>
+
+      <div class="filter-label">Structure</div>
+      <div class="filter-bar" id="structure-filters">
+        <button class="filter-pill active" data-filter="all" onclick="toggleFilter(this,'structure')">All</button>
+        <button class="filter-pill" data-filter="A" onclick="toggleFilter(this,'structure')">A — Narrative</button>
+        <button class="filter-pill" data-filter="B" onclick="toggleFilter(this,'structure')">B — Listicle</button>
+        <button class="filter-pill" data-filter="C" onclick="toggleFilter(this,'structure')">C — Rapid Proof</button>
+        <button class="filter-pill" data-filter="D" onclick="toggleFilter(this,'structure')">D — Testimonial</button>
+      </div>
+
+      <div class="filter-label">Lane</div>
+      <div class="filter-bar" id="lane-filters">
+        <button class="filter-pill active" data-filter="all" onclick="toggleFilter(this,'lane')">All</button>
+        <button class="filter-pill" data-filter="Protein" onclick="toggleFilter(this,'lane')">Protein</button>
+        <button class="filter-pill" data-filter="Mediterranean" onclick="toggleFilter(this,'lane')">Mediterranean</button>
+        <button class="filter-pill" data-filter="GLP-1" onclick="toggleFilter(this,'lane')">GLP-1</button>
+        <button class="filter-pill" data-filter="Convenience" onclick="toggleFilter(this,'lane')">Convenience</button>
+        <button class="filter-pill" data-filter="Mom" onclick="toggleFilter(this,'lane')">Mom</button>
+        <button class="filter-pill" data-filter="Dad" onclick="toggleFilter(this,'lane')">Dad</button>
+        <button class="filter-pill" data-filter="Salad" onclick="toggleFilter(this,'lane')">Salad</button>
+        <button class="filter-pill" data-filter="Skeptic" onclick="toggleFilter(this,'lane')">Skeptic</button>
+        <button class="filter-pill" data-filter="Fiber" onclick="toggleFilter(this,'lane')">Fiber</button>
+        <button class="filter-pill" data-filter="Breakfast" onclick="toggleFilter(this,'lane')">Breakfast</button>
+        <button class="filter-pill" data-filter="Weight Loss" onclick="toggleFilter(this,'lane')">Weight Loss</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+    <table class="asset-table" id="asset-table">
+      <thead>
+        <tr>
+          <th style="width:45px;">#</th>
+          <th>Nickname</th>
+          <th style="width:60px;">Str.</th>
+          <th>Lane</th>
+          <th>Hook Archetype</th>
+          <th style="width:50px;">Dur.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-structure="D" data-lane="Protein Salad"><td class="asset-num">1</td><td>The Workout Pivot</td><td>D</td><td>Protein; Salad</td><td>Situational Relatability</td><td>31s</td></tr>
+        <tr data-structure="A" data-lane="Weight Loss"><td class="asset-num">2</td><td>Crying for Consistency</td><td>A</td><td>Weight Loss</td><td>Emotional Reaction</td><td>38s</td></tr>
+        <tr data-structure="D" data-lane="Protein"><td class="asset-num">3</td><td>Post-Weight Loss Muscle</td><td>D</td><td>Protein</td><td>Personal Story / Transformation</td><td>23s</td></tr>
+        <tr data-structure="D" data-lane="Protein"><td class="asset-num">4</td><td>The Physique Secret <span class="star">★</span></td><td>D</td><td>Protein</td><td>Secret / Reveal</td><td>28s</td></tr>
+        <tr data-structure="D" data-lane="GLP-1"><td class="asset-num">5</td><td>The GLP-1 Balance</td><td>D</td><td>GLP-1</td><td>Emotional Reaction</td><td>31s</td></tr>
+        <tr data-structure="A" data-lane="Convenience"><td class="asset-num">6</td><td>Adulting Hack <span class="star">★</span></td><td>A</td><td>Convenience</td><td>Hack / Lifehack</td><td>30s</td></tr>
+        <tr data-structure="D" data-lane="Mom"><td class="asset-num">7</td><td>Postpartum Lifesaver</td><td>D</td><td>Mom</td><td>Personal Story / Transformation</td><td>43s</td></tr>
+        <tr data-structure="D" data-lane="Mom"><td class="asset-num">8</td><td>Moms Busy Season</td><td>D</td><td>Mom</td><td>Situational Relatability</td><td>38s</td></tr>
+        <tr data-structure="D" data-lane="Convenience"><td class="asset-num">9</td><td>Tiny Home Hero <span class="star">★</span></td><td>D</td><td>Convenience</td><td>Identity Hook</td><td>39s</td></tr>
+        <tr data-structure="D" data-lane="Convenience"><td class="asset-num">10</td><td>Meeting Marathon</td><td>D</td><td>Convenience</td><td>Meeting the Moment</td><td>14s</td></tr>
+        <tr data-structure="D" data-lane="Salad"><td class="asset-num">11</td><td>The Salad Reveal</td><td>D</td><td>Salad</td><td>Discovery / Did You Know</td><td>28s</td></tr>
+        <tr data-structure="D" data-lane="Mom"><td class="asset-num">12</td><td>The Mom Connection <span class="star">★</span></td><td>D</td><td>Mom</td><td>Blunt &amp; Direct; Social Proof</td><td>34s</td></tr>
+        <tr data-structure="C" data-lane="Mediterranean"><td class="asset-num">13</td><td>The Mediterranean Lifestyle <span class="star">★</span></td><td>C</td><td>Mediterranean</td><td>Authority / Trend</td><td>24s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">14</td><td>The Gym Goer's Solution <span class="star">★</span></td><td>A</td><td>Protein</td><td>Bold Competitive Claim</td><td>31s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">15</td><td>Why I Switched <span class="star">★</span> <span class="hookswap">⚠️</span></td><td>A</td><td>Protein</td><td>Competitive Switch</td><td>31s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">16</td><td>The Protein Mistake <span class="star">★</span></td><td>A</td><td>Protein</td><td>Mistake / Warning</td><td>31s</td></tr>
+        <tr data-structure="C" data-lane="GLP-1"><td class="asset-num">17</td><td>The GLP-1 Stick <span class="star">★</span></td><td>C</td><td>GLP-1</td><td>Identity Hook</td><td>21s</td></tr>
+        <tr data-structure="C" data-lane="Protein"><td class="asset-num">18</td><td>Pro-Sized Ambition <span class="star">★</span></td><td>C</td><td>Protein</td><td>Specific Claim + Zero Effort</td><td>23s</td></tr>
+        <tr data-structure="C" data-lane="Salad"><td class="asset-num">19</td><td>The Gourmet Salad Collab <span class="star">★</span></td><td>C</td><td>Salad</td><td>Visual-First / No-VO</td><td>13s</td></tr>
+        <tr data-structure="B" data-lane="Skeptic"><td class="asset-num">20</td><td>The Skeptic's Reveal <span class="star">★</span></td><td>B</td><td>Skeptic / Review</td><td>Skeptic / Honesty</td><td>28s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">21</td><td>The Fitness Hack <span class="star">★</span> <span class="hookswap">⚠️</span></td><td>A</td><td>Protein</td><td>Specific Claim + Zero Effort</td><td>31s</td></tr>
+        <tr data-structure="B" data-lane="Skeptic"><td class="asset-num">22</td><td>The Brutal Truth <span class="star">★</span></td><td>B</td><td>Skeptic / Review</td><td>Skeptic / Honesty</td><td>28s</td></tr>
+        <tr data-structure="C" data-lane="Protein"><td class="asset-num">23</td><td>The Recovery Meal Hack <span class="star">★</span></td><td>C</td><td>Protein</td><td>Specific Claim + Zero Effort</td><td>15s</td></tr>
+        <tr data-structure="A" data-lane="Mediterranean Mom"><td class="asset-num">24</td><td>Mediterranean Pregnancy <span class="star">★</span></td><td>A</td><td>Mediterranean; Mom</td><td>Personal Story / Transformation</td><td>28s</td></tr>
+        <tr data-structure="D" data-lane="Convenience Salad"><td class="asset-num">25</td><td>The Weekly Lineup <span class="star">★</span></td><td>D</td><td>Convenience; Salad</td><td>Personal Story / Transformation</td><td>38s</td></tr>
+        <tr data-structure="D" data-lane="Protein Salad"><td class="asset-num">26</td><td>The Fitness Beginner <span class="star">★</span></td><td>D</td><td>Protein; Salad</td><td>Identity Hook</td><td>29s</td></tr>
+        <tr data-structure="C" data-lane="GLP-1"><td class="asset-num">27</td><td>GLP-1 Bite Count <span class="star">★</span></td><td>C</td><td>GLP-1</td><td>Identity Hook</td><td>20s</td></tr>
+        <tr data-structure="A" data-lane="Mediterranean"><td class="asset-num">28</td><td>Why Aren't You Eating It? <span class="star">★</span></td><td>A</td><td>Mediterranean</td><td>Bold Competitive Claim</td><td>31s</td></tr>
+        <tr data-structure="D" data-lane="Salad Protein"><td class="asset-num">29</td><td>High Hyperfixation <span class="star">★</span></td><td>D</td><td>Salad; Protein</td><td>Discovery / Did You Know</td><td>29s</td></tr>
+        <tr data-structure="C" data-lane="Protein"><td class="asset-num">30</td><td>Real Whole Foods <span class="star">★</span></td><td>C</td><td>Protein</td><td>Bold Competitive Claim</td><td>18s</td></tr>
+        <tr data-structure="B" data-lane="Convenience"><td class="asset-num">31</td><td>The Partner Upgrade <span class="star">★</span></td><td>B</td><td>Convenience</td><td>Social Proof Entry</td><td>33s</td></tr>
+        <tr data-structure="C" data-lane="Protein Breakfast"><td class="asset-num">32</td><td>Automatic Breakfast <span class="star">★</span></td><td>C</td><td>Protein; Breakfast</td><td>Specific Claim + Zero Effort</td><td>21s</td></tr>
+        <tr data-structure="A" data-lane="Convenience"><td class="asset-num">33</td><td>Chaos Control <span class="star">★</span></td><td>A</td><td>Convenience</td><td>Situational Relatability</td><td>31s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">34</td><td>Personalized Plan <span class="star">★</span></td><td>A</td><td>Protein</td><td>Situational Relatability</td><td>40s</td></tr>
+        <tr data-structure="A" data-lane="Mediterranean"><td class="asset-num">35</td><td>The 30s Wellness <span class="star">★</span></td><td>A</td><td>Mediterranean</td><td>Identity Hook</td><td>40s</td></tr>
+        <tr data-structure="D" data-lane="Convenience Protein"><td class="asset-num">36</td><td>The Busy Professional <span class="star">★</span></td><td>D</td><td>Convenience; Protein</td><td>Blunt &amp; Direct</td><td>40s</td></tr>
+        <tr data-structure="A" data-lane="Mom"><td class="asset-num">37</td><td>French Busy Mom <span class="star">★</span></td><td>A</td><td>Mom</td><td>Identity Hook</td><td>40s</td></tr>
+        <tr data-structure="A" data-lane="Fiber"><td class="asset-num">38</td><td>The Gut Health Multiplier <span class="star">★</span></td><td>A</td><td>Fiber / Gut Health</td><td>Mistake / Warning</td><td>40s</td></tr>
+        <tr data-structure="D" data-lane="Protein Dad"><td class="asset-num">39</td><td>Marathon Dad <span class="star">★</span></td><td>D</td><td>Protein; Dad</td><td>Situational Relatability</td><td>40s</td></tr>
+        <tr data-structure="C" data-lane="Protein Breakfast"><td class="asset-num">40</td><td>Results Breakfast <span class="star">★</span></td><td>C</td><td>Protein; Breakfast</td><td>Specific Claim + Zero Effort</td><td>40s</td></tr>
+        <tr data-structure="C" data-lane="Mediterranean"><td class="asset-num">41</td><td>Mediterranean Variety <span class="star">★</span> <span class="hookswap">⚠️</span></td><td>C</td><td>Mediterranean</td><td>Visual-First / No-VO</td><td>40s</td></tr>
+        <tr data-structure="A" data-lane="Protein"><td class="asset-num">42</td><td>The Athlete Bulk <span class="star">★</span></td><td>A</td><td>Protein</td><td>Specific Claim + Zero Effort</td><td>39s</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="no-results" id="no-results">
+      <div style="margin-bottom:8px;font-size:15px;color:var(--text);">No assets in this lane yet.</div>
+      That's fine — Claude doesn't need existing assets to generate concepts. Use the <strong style="color:var(--teal);">Ideate</strong> tab and open with a NEW job. Claude will use generative methods (Problem-First, Cultural Moment, Competitive Gap) to build concepts from scratch. Treat output as hypotheses for testing — confidence is lower without proven reference points.
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:24px;">
+      <strong>Hook-swap pairs share body footage:</strong> #15/#14, #21/#16, #41/#13. Don't cite them as independent creative or claim new Entity IDs. Useful for understanding which hooks outperform on the same body.
+    </div>
+
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -915,6 +1143,42 @@ Be precise with timestamps and exact wording. When in doubt about a word, flag i
       btn.textContent = 'Copied';
       setTimeout(() => btn.textContent = 'Copy', 1500);
     });
+  }
+
+  // ── Asset Library Filtering ──
+  let activeFilters = { structure: 'all', lane: 'all' };
+
+  function toggleFilter(btn, type) {
+    const bar = btn.parentElement;
+    bar.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilters[type] = btn.dataset.filter;
+    filterAssets();
+  }
+
+  function filterAssets() {
+    const search = document.getElementById('asset-search').value.toLowerCase();
+    const rows = document.querySelectorAll('#asset-table tbody tr');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const structure = row.dataset.structure;
+      const lane = row.dataset.lane;
+      const text = row.textContent.toLowerCase();
+
+      const matchStructure = activeFilters.structure === 'all' || structure === activeFilters.structure;
+      const matchLane = activeFilters.lane === 'all' || lane.includes(activeFilters.lane);
+      const matchSearch = !search || text.includes(search);
+
+      if (matchStructure && matchLane && matchSearch) {
+        row.classList.remove('hidden');
+        visible++;
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
   }
 </script>
 
