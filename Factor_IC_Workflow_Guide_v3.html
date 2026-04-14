@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factor Creative Project — IC Workflow Guide v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F0F0F;
+    --surface: #1A1A1A;
+    --surface-raised: #222222;
+    --surface-hover: #2A2A2A;
+    --border: #333333;
+    --border-subtle: #262626;
+    --text: #E8E8E8;
+    --text-secondary: #999999;
+    --text-dim: #666666;
+    --accent: #E8FF59;
+    --accent-dim: rgba(232, 255, 89, 0.12);
+    --accent-mid: rgba(232, 255, 89, 0.25);
+    --coral: #FF6B6B;
+    --coral-dim: rgba(255, 107, 107, 0.12);
+    --teal: #4ECDC4;
+    --teal-dim: rgba(78, 205, 196, 0.12);
+    --blue: #6C9CFF;
+    --blue-dim: rgba(108, 156, 255, 0.12);
+    --purple: #B794F6;
+    --purple-dim: rgba(183, 148, 246, 0.12);
+    --font-body: 'DM Sans', sans-serif;
+    --font-display: 'Fraunces', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+  .header-version {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--surface);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+  }
+
+  /* ── Tabs ── */
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    padding: 20px 0 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text-secondary); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-content { display: none; padding: 32px 0 64px; }
+  .tab-content.active { display: block; }
+
+  /* ── Typography ── */
+  h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 20px;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--text);
+  }
+  h3:first-child { margin-top: 0; }
+  p { margin: 0 0 14px; color: var(--text-secondary); font-size: 15px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .card-accent {
+    border-left: 3px solid var(--accent);
+  }
+  .card-coral {
+    border-left: 3px solid var(--coral);
+  }
+  .card-blue {
+    border-left: 3px solid var(--blue);
+  }
+  .card-teal {
+    border-left: 3px solid var(--teal);
+  }
+  .card-purple {
+    border-left: 3px solid var(--purple);
+  }
+
+  .card-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .label-accent { color: var(--accent); }
+  .label-coral { color: var(--coral); }
+  .label-blue { color: var(--blue); }
+  .label-teal { color: var(--teal); }
+  .label-purple { color: var(--purple); }
+
+  /* ── Steps ── */
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .step-body { flex: 1; }
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Tags / Pills ── */
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 2px 4px 2px 0;
+  }
+  .tag-accent { background: var(--accent-dim); color: var(--accent); }
+  .tag-coral { background: var(--coral-dim); color: var(--coral); }
+  .tag-blue { background: var(--blue-dim); color: var(--blue); }
+  .tag-teal { background: var(--teal-dim); color: var(--teal); }
+  .tag-purple { background: var(--purple-dim); color: var(--purple); }
+
+  /* ── Tables ── */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  .ref-table th {
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 14px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  .ref-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .ref-table tr:last-child td { border-bottom: none; }
+
+  /* ── Code blocks ── */
+  .code-block {
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    margin: 12px 0;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ── Callouts ── */
+  .callout {
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 16px 0;
+  }
+  .callout-warning {
+    background: rgba(255, 107, 107, 0.08);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    color: var(--coral);
+  }
+  .callout-info {
+    background: rgba(108, 156, 255, 0.08);
+    border: 1px solid rgba(108, 156, 255, 0.2);
+    color: var(--blue);
+  }
+  .callout-success {
+    background: rgba(78, 205, 196, 0.08);
+    border: 1px solid rgba(78, 205, 196, 0.2);
+    color: var(--teal);
+  }
+
+  /* ── Simulated chat ── */
+  .sim-chat {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .sim-header {
+    padding: 10px 16px;
+    background: var(--surface-raised);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .sim-msg {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .sim-msg:last-child { border-bottom: none; }
+  .sim-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .sim-role-ic { color: var(--blue); }
+  .sim-role-claude { color: var(--teal); }
+  .sim-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .sim-text em { color: var(--text-dim); font-style: italic; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .header h1 { font-size: 26px; }
+    h2 { font-size: 20px; }
+    .tab-btn { font-size: 12px; padding: 10px 12px; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ════════ HEADER ════════ -->
+  <div class="header">
+    <div class="header-label">Factor × TubeScience</div>
+    <h1>IC Workflow Guide</h1>
+    <p class="header-sub">How to use the Claude project to write, scale, and ideate Factor creative.</p>
+    <span class="header-version">v3.0 · April 2026 · System v6.1</span>
+  </div>
+
+  <!-- ════════ TAB BAR ════════ -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="start">Start Here</button>
+    <button class="tab-btn" data-tab="write">Write</button>
+    <button class="tab-btn" data-tab="scale">Scale</button>
+    <button class="tab-btn" data-tab="ideate">Ideate</button>
+    <button class="tab-btn" data-tab="steering">Steering Phrases</button>
+    <button class="tab-btn" data-tab="fix">Fix Bad Output</button>
+    <button class="tab-btn" data-tab="gemini">Video Breakdown</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: START HERE                             -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-start" class="tab-content active">
+
+    <h2>The 3-Variable Gate</h2>
+    <p>Claude will not generate hooks, scripts, or concepts until you confirm three things. If you skip any, it will ask before proceeding. <strong>This is the single most important thing to know.</strong></p>
+
+    <div class="card card-accent">
+      <div class="card-label label-accent">Required in every first message</div>
+      <table class="ref-table">
+        <tr>
+          <td style="width:140px;"><strong>1. Lane</strong></td>
+          <td>Which marketing lane or audience angle? (Protein, Mediterranean, GLP-1, Convenience, Mom, Dad, Skeptic, Salad, Fiber, Breakfast, Weight Loss)</td>
+        </tr>
+        <tr>
+          <td><strong>2. Funnel Stage</strong></td>
+          <td><strong>FF</strong> (Full Funnel) — hook earns cold attention, body builds conviction. Hook cannot name Factor. <em>~60% of sprint output.</em><br><strong>MoF</strong> (Mid Funnel) — viewer already knows Factor. Skip product education, go straight to conviction. Hook can name Factor. <em>~40% of sprint output.</em></td>
+        </tr>
+        <tr>
+          <td><strong>3. Job Type</strong></td>
+          <td><strong>MORE</strong> — controlled variants of a winner (same lane, same audience)<br><strong>ADAPT</strong> — transplant a winner's mechanism to a new lane/context<br><strong>UPGRADE</strong> — improve salvageable creative<br><strong>NEW</strong> — net-new exploration</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Rule of thumb:</strong> Constrained briefs beat broad ones every time. "Fiber lane, Structure B, FF, Mistake/Warning hook" will produce sharper output than "write me a good script."
+    </div>
+
+    <h3>What Claude Does First</h3>
+    <p>After you pass the gate, Claude's first response depends on the job type:</p>
+    <table class="ref-table">
+      <tr>
+        <th style="width:120px;">Job Type</th>
+        <th>First Response</th>
+      </tr>
+      <tr>
+        <td><span class="tag tag-accent">WRITE</span></td>
+        <td>5–8 hooks with 1-line rationale each, archetype tagged. No strategy preamble.</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">SCALE</span></td>
+        <td>Decomposition of your source asset (hook mechanism, structural engine, copy engine, audience contract), then 3–5 variant directions.</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-teal">IDEATE</span></td>
+        <td>3 white space opportunities with trade-offs. Hooks come after you pick a direction.</td>
+      </tr>
+    </table>
+
+    <h3>Example Opening Messages</h3>
+
+    <div class="sim-chat">
+      <div class="sim-header">Good brief — Claude executes immediately</div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-ic">You</div>
+        <div class="sim-text">WRITE. Fiber lane, FF. Looking for Structure A hooks with a Mistake/Warning archetype. Want to push into the gut-brain connection angle — the library only has Asset #38 in this lane.</div>
+      </div>
+    </div>
+
+    <div class="sim-chat">
+      <div class="sim-header">Good brief — SCALE job</div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-ic">You</div>
+        <div class="sim-text">MORE on Asset #28 (Why Aren't You Eating It?). FF. Want 4 hook variants that push the authority mechanism but don't repeat "Mediterranean diet is the best in the world."</div>
+      </div>
+    </div>
+
+    <div class="sim-chat">
+      <div class="sim-header">Vague brief — Claude will ask before generating</div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-ic">You</div>
+        <div class="sim-text">Write me something good for Factor.</div>
+      </div>
+      <div class="sim-msg">
+        <div class="sim-role sim-role-claude">Claude</div>
+        <div class="sim-text">Before I generate — need to lock three things: (1) Which lane? (2) FF or MoF? (3) Iterating on a winner or exploring new territory?</div>
+      </div>
+    </div>
+
+    <h3>What Claude Tags on Every Output</h3>
+    <p>Every hook, concept, or script gets these tags automatically. <strong>Check them — if they drift, ask Claude to re-tag.</strong></p>
+    <div style="margin: 12px 0;">
+      <span class="tag tag-accent">Job Type</span>
+      <span class="tag tag-blue">Lane</span>
+      <span class="tag tag-teal">Structure (A/B/C/D)</span>
+      <span class="tag tag-coral">Hook Archetype</span>
+      <span class="tag tag-purple">Motivator</span>
+    </div>
+    <p>Format: <code style="font-family:var(--font-mono);font-size:13px;background:var(--surface);padding:2px 8px;border-radius:4px;">[NEW | Protein | B - Listicle | Skeptic/Honesty | M-PROBLEM]</code></p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: WRITE                                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-write" class="tab-content">
+
+    <h2>Write Workflow</h2>
+    <p>For new scripts, hooks, and concepts. Use when you have an angle but not a source asset to scale from.</p>
+
+    <div class="card">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open with the gate</div>
+          <div class="step-desc">State your lane, funnel stage (FF or MoF), and job type (WRITE/NEW). Add structure or hook archetype constraints if you have preferences — constraints sharpen output.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Review the hooks</div>
+          <div class="step-desc">Claude returns 5–8 hooks with archetype tags and 1-line rationale. It flags which push fresh territory vs. iterate on proven patterns. Pick your favorites or redirect.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Develop the copy arc</div>
+          <div class="step-desc">Once you pick hook(s), Claude writes the full copy arc: onramp → benefit sequence → barrier-bust → CTA. <strong>No timestamps or visual direction yet</strong> — that comes later.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Iterate on the script</div>
+          <div class="step-desc">Give feedback. Claude adjusts. After each round you'll see a <strong>quality scorecard</strong> — three scores out of 5 (Hook, Onramp, Benefit Sequence). The weakest dimension gets a specific fix recommendation.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Format for production</div>
+          <div class="step-desc">When you're ready to brief production, ask for the formatted script: timestamps, visuals, copy, and VO on separate lines. <strong>Claude only does this when you ask.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>The quality scorecard</strong> appears after every script. Format:<br>
+      <code style="font-family:var(--font-mono);font-size:12px;">Hook: 4/5 → #28 | Onramp: 3/5 → #18 | Benefit: 4/5 → #33</code><br>
+      Anchor citations (e.g. → #28) ground each score against a proven performer. If total is below 10/15, Claude automatically diagnoses the problem.
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: SCALE                                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-scale" class="tab-content">
+
+    <h2>Scale Workflow</h2>
+    <p>For MORE (variants of a winner) and ADAPT (transplant to new lane/context). Always starts with decomposition — skipping this is the #1 cause of weak scaling output.</p>
+
+    <div class="card">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open with the gate + source asset</div>
+          <div class="step-desc">State lane, funnel, and job type (MORE or ADAPT). Name the source asset by number or nickname. Example: "MORE on #23 (Recovery Meal Hack), FF, Protein lane."</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Review the decomposition</div>
+          <div class="step-desc">Claude breaks down the source into four components:
+            <br>• <strong>Hook mechanism</strong> — what psychological lever the first 2s pulls
+            <br>• <strong>Structural engine</strong> — the persuasion sequence beat by beat
+            <br>• <strong>Copy engine</strong> — the repeating language pattern or rhetorical device
+            <br>• <strong>Audience contract</strong> — who it promises value to and what value
+            <br>It names what to preserve vs. change.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Review scaled variants</div>
+          <div class="step-desc">3–5 variants presented as hook + copy arc (no formatting). Each tagged. For <strong>MORE</strong>, core audience stays the same — variants change hooks, openers, format. For <strong>ADAPT</strong>, the mechanism transfers to a new lane or context.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Pick, iterate, format</div>
+          <div class="step-desc">Same as Write steps 4–5. Pick direction, iterate with scorecard, request production format when ready.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>Hook-swap warning:</strong> Assets #15/#14, #21/#16, and #41/#13 share body footage. Don't cite them as independent creative or claim new Entity IDs. They're useful for understanding which hooks outperform on the same body.
+    </div>
+
+    <h3>Feeding Claude Ads Outside the Library</h3>
+    <p>To scale, adapt, or analyze an ad that isn't in the 42-asset library, provide one of these:</p>
+    <table class="ref-table">
+      <tr>
+        <td style="width:100px;"><span class="tag tag-teal">Best</span></td>
+        <td>Scene-by-scene breakdown from Gemini (see Video Breakdown tab)</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">Good</span></td>
+        <td>VO transcript — Claude can analyze the copy engine and persuasion arc from words alone</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-accent">Workable</span></td>
+        <td>Text description of what happens, who's in it, what's shown, how long it runs</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: IDEATE                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-ideate" class="tab-content">
+
+    <h2>Ideate Workflow</h2>
+    <p>For NEW concepts and white space exploration. Use when you want to push into underserved territory rather than iterate on what exists.</p>
+
+    <div class="card">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open with the gate</div>
+          <div class="step-desc">State lane (or "open — show me the gaps"), funnel stage, and job type (NEW/IDEATE). Claude defaults to including at least one MoF concept.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Review white space opportunities</div>
+          <div class="step-desc">Claude surfaces 3 opportunities in your lane with rationale — what's underserved, what the library is missing, what has high probability of differentiating. Each comes with trade-offs.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Pick a territory</div>
+          <div class="step-desc">Choose which white space direction to explore — or redirect Claude if none land.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Review hooks</div>
+          <div class="step-desc">5–8 hooks generated for your chosen territory. For IDEATE/NEW, Claude uses structured generative methods (Problem-First, Cultural Moment, Competitive Gap) and tags which method produced each hook.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Develop, iterate, format</div>
+          <div class="step-desc">Same as Write steps 3–5.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>High-Priority White Space (Library-Wide)</h3>
+    <p>These territories have minimal or zero coverage. Good starting points for IDEATE work.</p>
+    <table class="ref-table">
+      <tr>
+        <th>Territory</th>
+        <th>Why It's Open</th>
+      </tr>
+      <tr>
+        <td>Structure B + non-skeptic hooks</td>
+        <td>Only 3 assets use Listicle, and 2 are skeptic. Biggest production gap.</td>
+      </tr>
+      <tr>
+        <td>Fiber / Gut Health</td>
+        <td>Only 1 asset (#38). Nearly everything is white space.</td>
+      </tr>
+      <tr>
+        <td>Breakfast</td>
+        <td>Only 2 assets (#32, #40) despite active breakfast offer.</td>
+      </tr>
+      <tr>
+        <td>Busy Dad</td>
+        <td>Only 1 asset (#39). Non-athletic, WFH, new dad — all open.</td>
+      </tr>
+      <tr>
+        <td>Couples / household</td>
+        <td>Only 1 asset (#31).</td>
+      </tr>
+      <tr>
+        <td>Humor / meme / trend-jacking</td>
+        <td>Zero comedy assets in the library.</td>
+      </tr>
+      <tr>
+        <td>Gen Z male protein</td>
+        <td>Zero Gen Z-native assets.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: STEERING PHRASES                       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-steering" class="tab-content">
+
+    <h2>Steering Phrases</h2>
+    <p>These exact phrases trigger specific behaviors. Use them mid-conversation to redirect output without re-explaining what you want.</p>
+
+    <h3>Quality Controls</h3>
+    <div class="card card-accent">
+      <table class="ref-table">
+        <tr>
+          <td style="width:260px;"><strong>"Show me your filter"</strong></td>
+          <td>Switches to full rubric mode — all candidates with complete scores and reasoning across all 3 dimensions.</td>
+        </tr>
+        <tr>
+          <td><strong>"Just give me your best"</strong></td>
+          <td>Returns to scorecard mode — only the top pick with compact scores.</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>Direction Changes</h3>
+    <div class="card card-blue">
+      <table class="ref-table">
+        <tr>
+          <td style="width:260px;"><strong>"Too safe" / "Push harder"</strong></td>
+          <td>Claude shifts to lower-saturation hook archetypes. May switch to Structure B if you're in D.</td>
+        </tr>
+        <tr>
+          <td><strong>"Too generic"</strong></td>
+          <td>Claude adds specific numbers, names specific behaviors, mines CSV VOs for authentic phrasing.</td>
+        </tr>
+        <tr>
+          <td><strong>"More like Asset #X"</strong></td>
+          <td>Claude decomposes #X (hook mechanism, structural engine, copy engine, audience contract) and applies that mechanism to your current concept.</td>
+        </tr>
+        <tr>
+          <td><strong>"Not converting" / "Not DR enough"</strong></td>
+          <td>Tightens benefit sequence. Relief before features. More barrier-busting. Sharper CTA.</td>
+        </tr>
+        <tr>
+          <td><strong>"Feels like an ad"</strong></td>
+          <td>First-person voice. Removes brand language from first 10 seconds. Shifts to confessional or situational hooks.</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>Session Management</h3>
+    <div class="card card-teal">
+      <table class="ref-table">
+        <tr>
+          <td style="width:260px;"><strong>Start a new chat</strong></td>
+          <td>After ~25 exchanges, output quality degrades (context fatigue). Open a fresh conversation for sustained work. This is the correct workflow, not a workaround.</td>
+        </tr>
+        <tr>
+          <td><strong>Reference an asset by number</strong></td>
+          <td>Claude has the full 42-asset library loaded. Say "#23" or "Recovery Meal Hack" — no need to paste transcripts for library assets.</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>What Claude Won't Do Until You Ask</h3>
+    <div class="card card-coral">
+      <table class="ref-table">
+        <tr>
+          <td style="width:260px;"><strong>Full script formatting</strong></td>
+          <td>Timestamps + visual + copy + VO format only appears when you request it. Default output is hooks → copy arc.</td>
+        </tr>
+        <tr>
+          <td><strong>Visual direction</strong></td>
+          <td>Claude writes copy and VO first. Ask for visual direction when you're ready to brief production.</td>
+        </tr>
+        <tr>
+          <td><strong>Duration estimates</strong></td>
+          <td>Available on request or when you ask for a production brief.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: FIX BAD OUTPUT                         -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-fix" class="tab-content">
+
+    <h2>Fix Bad Output</h2>
+    <p>When Claude's output isn't landing, use this diagnostic map. The system has a built-in corrections file — these phrases help you trigger the right fix faster.</p>
+
+    <h3>Script Problems</h3>
+    <div class="card card-coral">
+      <table class="ref-table">
+        <tr>
+          <th style="width:220px;">Symptom</th>
+          <th>What's Wrong</th>
+          <th style="width:220px;">Say This</th>
+        </tr>
+        <tr>
+          <td>Sounds like an ad / voice breaks mid-script</td>
+          <td><strong>Product Page Break.</strong> Script shifted from authentic first-person to brand voice in the benefit sequence.</td>
+          <td>"This sounds like a product page. Rewrite the benefit sequence through the character's experience."</td>
+        </tr>
+        <tr>
+          <td>Fine but flat / scores 8–9 range</td>
+          <td><strong>Missing Center of Gravity.</strong> No single line reorganizes how the viewer thinks about their behavior.</td>
+          <td>"Where's the reframe? I need one line that changes how the viewer sees their own situation."</td>
+        </tr>
+        <tr>
+          <td>Strong hook, weak body</td>
+          <td><strong>Front-Loaded Script.</strong> Onramp resolved the tension instead of deepening it.</td>
+          <td>"The hook peaked at second two. The onramp needs to deepen investment, not deliver answers."</td>
+        </tr>
+        <tr>
+          <td>Generic / could be any brand</td>
+          <td><strong>Abstraction Drift.</strong> Operating at category level, not behavior level.</td>
+          <td>"Too generic — add specific numbers, name specific behaviors, name the alternative they're currently using."</td>
+        </tr>
+        <tr>
+          <td>Viewer has no reason to believe</td>
+          <td><strong>Thin Barrier-Busting.</strong> Objections addressed with generic assertions, not specific evidence.</td>
+          <td>"The barrier-bust is decorative. Name the specific objection this persona has and answer it with evidence."</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>Funnel Problems</h3>
+    <div class="card card-blue">
+      <table class="ref-table">
+        <tr>
+          <th style="width:220px;">Symptom</th>
+          <th>What's Wrong</th>
+          <th style="width:220px;">Say This</th>
+        </tr>
+        <tr>
+          <td>MoF script explains what Factor is</td>
+          <td>Script re-educates a viewer who already knows. Re-explaining signals the ad isn't for them.</td>
+          <td>"This is MoF — strip all product education. No 'fresh never frozen,' no 'here's how it works.' Skip to conviction."</td>
+        </tr>
+        <tr>
+          <td>Script is longer than it needs to be</td>
+          <td>Adding persuasion beats for a viewer who doesn't need persuading.</td>
+          <td>"This viewer is warm — what beat exists that they don't already know? Cut it."</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>Session Problems</h3>
+    <div class="card card-teal">
+      <table class="ref-table">
+        <tr>
+          <th style="width:220px;">Symptom</th>
+          <th>What's Wrong</th>
+          <th style="width:220px;">Fix</th>
+        </tr>
+        <tr>
+          <td>Output getting worse over time</td>
+          <td><strong>Context Fatigue.</strong> After ~25 exchanges, Claude's attention to project files degrades.</td>
+          <td>Start a new conversation. This is not a workaround — it's the correct workflow.</td>
+        </tr>
+        <tr>
+          <td>Iterating without improvement</td>
+          <td><strong>Wrong Unit of Iteration.</strong> Refining language when structure is the problem, or refining hooks when the onramp is weak.</td>
+          <td>Ask: "What's the lowest-scoring dimension? Iterate on that, not the thing I asked about."</td>
+        </tr>
+        <tr>
+          <td>Everything is generic</td>
+          <td><strong>Vague Brief.</strong> Broad requests produce safe output.</td>
+          <td>Add constraints. Specify structure + archetype + persona + lane. Constraints are creative forcing functions.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: VIDEO BREAKDOWN                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="tab-gemini" class="tab-content">
+
+    <h2>Video Breakdown (Gemini)</h2>
+    <p>Use this prompt in Gemini to create scene-by-scene breakdowns of video ads. The output format matches what Claude expects for SCALE and analysis work.</p>
+
+    <div class="callout callout-info">
+      <strong>When to use:</strong> When you want Claude to scale, adapt, or analyze an ad that isn't in the 42-asset library. Upload the video to Gemini, run this prompt, then paste the output into Claude.
+    </div>
+
+    <div class="code-block" id="gemini-prompt"><button class="copy-btn" onclick="copyPrompt(this)">Copy</button>You are analyzing a direct-response video advertisement for a meal delivery service. Provide a detailed scene-by-scene breakdown using the following format.
+
+IMPORTANT: Break scenes by CONTENT BEATS (when the message, visual focus, or argument changes), NOT by fixed time intervals. A scene can be 1 second or 8 seconds — the break happens when the ad shifts what it's doing.
+
+For each scene:
+[Timestamp range]
+Visual: What's on screen — setting, talent, product shots, text overlays, transitions
+Copy: Any on-screen text (exact wording)
+VO: Voiceover script (exact wording)
+Function: What this beat is DOING in the persuasion sequence (hook, pain point, solution entry, feature proof, barrier-bust, social proof, variety showcase, CTA, etc.)
+
+After the scene breakdown, provide:
+
+METADATA:
+- Estimated duration: [Xs]
+- Primary Structure: [A (Narrative), B (Listicle), C (Rapid Proof), or D (Testimonial)]
+- Hook Archetype: [type]
+- Primary Lane: [which marketing angle]
+- Motivator: [M-PROBLEM, M-OUTCOME, M-DEAL, or M-ANTI-ALT]
+- Funnel Stage: [FF or MoF]
+- Talent: [description — gender, approximate age, setting]
+- Production Style: [studio/lifestyle/UGC-style/mixed]
+
+Be precise with timestamps and exact wording. When in doubt about a word, flag it with [?].</div>
+
+    <h3>Tips</h3>
+    <p><strong>Use Gemini 2.5 Pro</strong> — it handles video natively. Upload the video file directly.</p>
+    <p><strong>Beat-based, not time-based.</strong> This prompt breaks scenes by content shifts, not fixed intervals. A 2-second hook and an 8-second benefit sequence are both one "scene."</p>
+    <p><strong>Paste the full output into Claude.</strong> Claude will use the breakdown for decomposition, scaling, and analysis. The metadata tags match Claude's tagging system.</p>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ═══════════ SCRIPT ═══════════ -->
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  function copyPrompt(btn) {
+    const block = document.getElementById('gemini-prompt');
+    // Get text content excluding the button
+    const text = block.textContent.replace('Copy', '').replace('Copied', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  }
+</script>
+
+</body>
+</html>
